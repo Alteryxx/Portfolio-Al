@@ -51,59 +51,52 @@ const MatrixLanding = () => {
       </header>
 
       <main>
-        
         <section className="hero">
           {/* Scrambled Title Animates Words One by One in a Loop */}
           <ScrambledTitle texts={["Welcome To", "My Portfolio"]} delay={2000} />
-          
-          <p className="hero-text">All Arround Services</p>
+
+          <p className="hero-text">All Around Services</p>
           <div className="button-group">
             <button className="button primary-button">My Skills</button>
             <button className="button secondary-button">Learn More</button>
-          
           </div>
+
+          {/* About Me Section with Looped Scrambled Headings */}
           <section className="about-me">
-  <h2>About Me</h2>
-  <p>
-    Hi, I'm Al Fernandez, a passionate Computer Technecian/ Kind of Developer with a love for creating innovative digital experiences.
-    A TESDA Certified NC 2 Holder for Computer System Servicing, sharpening my problem-solving skills and staying up-to-date 
-    with the latest tech trends and Repairs.
-  </p>
+            <ScrambledTitle texts={["About Me"]} delay={2000} loop />
+            <p>
+              Hi, I'm Al Fernandez, a passionate Computer Technician / Kind of Developer with a love for creating innovative digital experiences.
+              A TESDA Certified NC 2 Holder for Computer System Servicing, sharpening my problem-solving skills and staying up-to-date 
+              with the latest tech trends and Repairs.
+            </p>
 
-  <h3>Skills & Expertise</h3>
-  <ul>
-    <li>Computer System Servicing</li>
-    <li>Server Management Specialist</li>
-    <li>UI/UX Design & Animation</li>
-    <li>Networking Connection for CISCO Integration Products </li>
-    
-  </ul>
+            <ScrambledTitle texts={["Skills & Expertise"]} delay={2000} />
+            <ul>
+              <li>Computer System Servicing</li>
+              <li>Server Management Specialist</li>
+              <li>UI/UX Design & Animation</li>
+              <li>Networking Connection for CISCO Integration Products</li>
+            </ul>
 
-  <h3>Career Goals</h3>
-  <p>
-    My goal is to continue pushing the boundaries of web development, specializing in AI-powered applications 
-    and encouraging the freedom of repairing devices. I aim to contribute to open-source projects and organizing Tech tips.
-  </p>
+            <ScrambledTitle texts={["Career Goals"]} delay={2000} loop />
+            <p>
+              My goal is to continue pushing the boundaries of web development, specializing in AI-powered applications 
+              and encouraging the freedom of repairing devices. I aim to contribute to open-source projects and organizing Tech tips.
+            </p>
 
-  <h3>Fun Facts & Hobbies</h3>
-  <p>
-    When I’m not coding, I enjoy Gaming , Watching some Tech Repairs as well as experimenting with digital art. I believe 
-    in continuous learning!
-  </p>
+            <ScrambledTitle texts={["Fun Facts & Hobbies"]} delay={2000} loop />
+            <p>
+              When I’m not coding, I enjoy Gaming, Watching some Tech Repairs as well as experimenting with digital art. I believe 
+              in continuous learning!
+            </p>
 
-  <div className="cta">
-    <p>Want to collaborate or just say hi?</p>
-    <button className="button primary-button">Get in Touch</button>
-  </div>
-</section>
-
-
+            <div className="cta">
+              <p>Want to collaborate or just say hi?</p>
+              <button className="button primary-button">Get in Touch</button>
+            </div>
+          </section>
         </section>
-
-       
       </main>
-
-      
     </div>
   );
 };
