@@ -184,4 +184,53 @@ body {
     color: rgba(0, 255, 0, 0.6);
     margin: 0.5rem 0;
   }
+
+  /*ABOUT ME */
+  .about-me {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 60px 20px;
+    text-align: center;
+  }
+  
+  .about-me h2, .about-me h3 {
+    color: #00ff00; /* Matrix green color */
+    margin-bottom: 20px;
+  }
+  
+  .about-me p {
+    font-size: 20px;
+    line-height: 1.6;
+    max-width: 800px;
+    margin: 0 auto 20px;
+  }
+  
+  .about-me ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .about-me li {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  .cta {
+    margin-top: 30px;
+  }
+  
+  .button {
+    background-color: #00ff00;
+    color: black;
+    padding: 10px 20px;
+    font-size: 18px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .button:hover {
+    background-color: white;
+  }
+  
   
