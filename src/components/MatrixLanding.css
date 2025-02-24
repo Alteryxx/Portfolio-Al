@@ -188,13 +188,13 @@ body {
   /*ABOUT ME */
   .about-me {
     background-color: rgba(0, 0, 0, 0.8);
-    color: white;
+    color: rgb(242, 242, 247);
     padding: 60px 20px;
     text-align: center;
   }
   
   .about-me h2, .about-me h3 {
-    color: #00ff00; /* Matrix green color */
+    color: #ee0505; /* Matrix green color */
     margin-bottom: 20px;
   }
   
