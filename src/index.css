@@ -1,33 +1,44 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Courier Prime', monospace;
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
+  color-scheme: dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #000000;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  
+  /* Matrix theme variables */
+  --matrix-green: #00ff41;
+  --matrix-dark-green: #007718;
+  --text-color: #e0e0e0;
+  --background-color: #000;
 }
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: #00ff41;
   text-decoration: inherit;
+  transition: color 0.2s, text-shadow 0.2s;
 }
 a:hover {
-  color: #535bf2;
+  color: #00ff7f;
+  text-shadow: 0 0 8px rgba(0, 255, 127, 0.5);
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
+  padding: 0;
+  min-width: 100%;
   min-height: 100vh;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  background-color: #000000 !important;
+  color: var(--text-color);
 }
 
 h1 {
@@ -36,33 +47,59 @@ h1 {
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 255, 65, 0.3);
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: rgba(0, 30, 0, 0.1);
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: border-color 0.25s, background-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: #00ff41;
+  background-color: rgba(0, 255, 65, 0.1);
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 2px solid rgba(0, 255, 65, 0.5);
 }
 
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  display: block;
+  position: relative;
+  background-color: #000000;
+}
+
+
+body {
+  display: block;
+}
+
+/* Force dark mode regardless of preferences */
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    color: var(--text-color);
+    background-color: #000000;
+  }
+  body {
+    background-color: #000000 !important;
+    color: var(--text-color);
   }
   a:hover {
-    color: #747bff;
+    color: var(--matrix-green);
+    text-shadow: 0 0 8px rgba(0, 255, 65, 0.5);
   }
   button {
-    background-color: #f9f9f9;
+    background-color: rgba(0, 30, 0, 0.1);
+    border-color: rgba(0, 255, 65, 0.3);
+  }
+  button:hover {
+    border-color: var(--matrix-green);
+    background-color: rgba(0, 255, 65, 0.1);
   }
 }
