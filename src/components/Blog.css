@@ -1,0 +1,837 @@
+/* Blog Page Styles */
+:root {
+  --matrix-green: #00ff41;
+  --matrix-light-green: #00ff7f;
+  --matrix-dark-green: #008f11;
+  --matrix-black: #000000;
+  --matrix-gray: #1f2833;
+  --header-height: 70px; /* Define header height as a variable */
+}
+
+.blog-page {
+  background-color: var(--matrix-black);
+  color: var(--matrix-green);
+  min-height: 100vh;
+  overflow-x: hidden;
+  font-family: 'Courier Prime', monospace;
+  padding-top: var(--header-height); /* Add padding to the entire page to account for fixed header */
+  position: relative; /* Needed for positioned children */
+}
+
+/* Matrix background effect */
+.matrix-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background-color: rgba(0, 5, 0, 0.1); /* Subtle background tint */
+  box-shadow: inset 0 0 80px rgba(0, 30, 0, 0.15); /* Soft inner glow */
+}
+
+.matrix-drop {
+  position: absolute;
+  color: var(--matrix-green);
+  font-size: 1.2rem;
+  font-weight: normal;
+  opacity: 0.25;
+  text-shadow: 0 0 4px rgba(0, 255, 65, 0.2);
+  pointer-events: none;
+}
+
+.matrix-drop.bright-green {
+  color: var(--matrix-light-green);
+  opacity: 0.35;
+  text-shadow: 0 0 6px rgba(0, 255, 65, 0.4), 0 0 10px rgba(0, 255, 65, 0.2);
+}
+
+/* Add wiggle animation for matrix characters */
+.matrix-drop.wiggle {
+  animation: wiggle 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes wiggle {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(var(--wiggle-amount, 2px));
+  }
+}
+
+/* Main content container */
+.blog-content {
+  padding-top: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1; /* Make sure content is above the matrix background */
+}
+
+/* Blog hero section */
+.blog-hero {
+  min-height: 40vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  position: relative;
+  background: radial-gradient(
+    circle at center,
+    rgba(0, 15, 0, 0.15) 30%,
+    rgba(0, 0, 0, 0.9) 70%
+  );
+  margin-top: 20px;
+}
+
+.blog-hero-content {
+  max-width: 800px;
+  z-index: 5;
+  padding: 30px;
+  background-color: rgba(0, 10, 0, 0.6);
+  border-radius: 5px;
+  box-shadow: 0 0 25px rgba(0, 20, 0, 0.7);
+}
+
+.blog-tagline {
+  font-size: 1.3rem;
+  margin-bottom: 2rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+}
+
+.highlight-text {
+  color: var(--matrix-green);
+  font-weight: bold;
+  text-shadow: 0 0 8px var(--matrix-green);
+}
+
+/* Section styling */
+.section-container {
+  padding: 4rem 2rem;
+  margin: 0 auto;
+  max-width: 1200px;
+  position: relative;
+}
+
+.section-title {
+  color: var(--matrix-light-green);
+  font-size: 2.2rem;
+  margin-bottom: 3rem;
+  text-align: center;
+  position: relative;
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+  letter-spacing: 1px;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 2px;
+  background: var(--matrix-green);
+  box-shadow: 0 0 8px var(--matrix-green);
+}
+
+.section-description {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 2rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+/* Featured posts grid */
+.featured-posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+.featured-post-card {
+  background-color: rgba(0, 30, 0, 0.1);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  border-radius: 5px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.featured-post-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3),
+    0 0 15px rgba(0, 255, 65, 0.3);
+  border-color: var(--matrix-green);
+}
+
+.post-image-placeholder {
+  display: none;
+}
+
+.matrix-content {
+  font-size: 5rem;
+  color: var(--matrix-dark-green);
+  text-shadow: 0 0 15px var(--matrix-green);
+}
+
+.post-content {
+  padding: 1.5rem;
+}
+
+.post-title {
+  font-size: 1.5rem;
+  color: var(--matrix-light-green);
+  margin-bottom: 0.5rem;
+  transition: color 0.3s ease;
+  position: relative;
+  padding-top: 0.5rem;
+}
+
+.post-title::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 30px;
+  height: 2px;
+  background: var(--matrix-green);
+  box-shadow: 0 0 8px var(--matrix-green);
+}
+
+.featured-post-card:hover .post-title {
+  color: var(--matrix-light-green);
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.4);
+}
+
+.post-meta {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.post-date {
+  margin-right: 1rem;
+}
+
+.post-excerpt {
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.post-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.category-tag {
+  background-color: rgba(0, 255, 65, 0.1);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  color: var(--matrix-green);
+  font-size: 0.8rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+.category-tag:hover {
+  background-color: rgba(0, 255, 65, 0.2);
+  border-color: var(--matrix-green);
+}
+
+.read-more-link {
+  color: var(--matrix-green);
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.read-more-link:hover {
+  color: var(--matrix-light-green);
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.5);
+  transform: translateX(5px);
+}
+
+/* Regular posts grid */
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.post-card {
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(0, 30, 0, 0.1);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  border-radius: 5px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.post-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3),
+    0 0 15px rgba(0, 255, 65, 0.3);
+  border-color: var(--matrix-green);
+}
+
+.post-card-content {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.post-card-content .read-more-link {
+  margin-top: auto;
+}
+
+/* Newsletter section */
+.newsletter-section {
+  margin: 4rem 0;
+  padding: 3rem 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 30, 0, 0),
+    rgba(0, 30, 0, 0.2),
+    rgba(0, 30, 0, 0)
+  );
+}
+
+.newsletter-form {
+  display: flex;
+  max-width: 600px;
+  margin: 0 auto;
+  gap: 1rem;
+}
+
+.email-input {
+  flex: 1;
+  padding: 0.8rem 1rem;
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  background-color: rgba(0, 30, 0, 0.2);
+  color: rgba(255, 255, 255, 0.9);
+  border-radius: 4px;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+.email-input:focus {
+  outline: none;
+  border-color: var(--matrix-green);
+  box-shadow: 0 0 8px rgba(0, 255, 65, 0.4);
+}
+
+.subscribe-button {
+  padding: 0.8rem 1.5rem;
+  background-color: rgba(0, 255, 65, 0.1);
+  border: 1px solid rgba(0, 255, 65, 0.5);
+  color: var(--matrix-green);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+}
+
+.subscribe-button:hover {
+  background-color: rgba(0, 255, 65, 0.2);
+  border-color: var(--matrix-green);
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.4);
+}
+
+/* Footer is typically shared across components, but adding some styles here */
+.footer {
+  background-color: black;
+  text-align: center;
+  padding: 4rem 0 2rem;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 992px) {
+  .featured-posts-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .section-container {
+    padding: 3rem 1.5rem;
+  }
+  
+  .blog-hero-content {
+    padding: 20px;
+  }
+  
+  .blog-tagline {
+    font-size: 1.1rem;
+  }
+  
+  .newsletter-form {
+    flex-direction: column;
+  }
+  
+  .featured-post-card {
+    flex-direction: column;
+  }
+  
+  .post-image-placeholder {
+    height: 150px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .post-categories {
+    flex-wrap: wrap;
+  }
+  
+  .section-title {
+    font-size: 1.8rem;
+  }
+  
+  .blog-tagline {
+    font-size: 1rem;
+  }
+}
+
+/* Add styles for the new category sections */
+.category-highlights-section {
+  padding: 3rem 0;
+  background-color: rgba(0, 10, 0, 0.7);
+  border-top: 1px solid rgba(0, 255, 0, 0.2);
+  border-bottom: 1px solid rgba(0, 255, 0, 0.2);
+}
+
+.category-section {
+  margin-bottom: 3rem;
+}
+
+.category-title {
+  color: #00ff00;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(0, 255, 0, 0.3);
+  text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+.category-posts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.category-post-card {
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(0, 20, 0, 0.7);
+  border: 1px solid rgba(0, 255, 0, 0.2);
+  border-radius: 5px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.category-post-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), 0 0 15px rgba(0, 255, 0, 0.3);
+  border-color: rgba(0, 255, 0, 0.5);
+}
+
+.category-post-card .post-title {
+  color: #00ff00;
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+.category-post-card .post-excerpt {
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.category-post-card .read-more-link {
+  display: inline-block;
+  color: #00ff00;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.category-post-card .read-more-link:hover {
+  text-shadow: 0 0 10px rgba(0, 255, 0, 0.7);
+  transform: translateX(5px);
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+  .category-posts {
+    grid-template-columns: 1fr;
+  }
+  
+  .category-title {
+    font-size: 1.5rem;
+  }
+  
+  .category-post-card .post-title {
+    font-size: 1.2rem;
+  }
+}
+
+/* Updated image styles for blog posts */
+.post-image {
+  height: 220px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.5s ease-out;
+}
+
+.post-card-image {
+  height: 180px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px 4px 0 0;
+  transition: transform 0.5s ease-out;
+}
+
+.category-post-image {
+  height: 160px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px 4px 0 0;
+  margin: -1.5rem -1.5rem 1rem -1.5rem;
+  transition: transform 0.5s ease-out;
+}
+
+.matrix-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 30, 0, 0.85) 100%);
+  z-index: 1;
+}
+
+.matrix-overlay::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    rgba(0, 255, 65, 0.05) 2px,
+    transparent 4px
+  );
+  opacity: 0.3;
+  pointer-events: none;
+  animation: scan 10s linear infinite;
+}
+
+.matrix-overlay::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(0, 255, 65, 0.1) 0%,
+    transparent 70%
+  );
+  opacity: 0.6;
+}
+
+.featured-post-card:hover .matrix-overlay,
+.post-card:hover .matrix-overlay,
+.category-post-card:hover .matrix-overlay {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 50, 0, 0.75) 100%);
+}
+
+.featured-post-card:hover .matrix-overlay::after,
+.post-card:hover .matrix-overlay::after,
+.category-post-card:hover .matrix-overlay::after {
+  opacity: 0.8;
+}
+
+/* Media query adjustments for images */
+@media screen and (max-width: 768px) {
+  .post-image,
+  .post-card-image {
+    height: 160px;
+  }
+  
+  .category-post-image {
+    height: 140px;
+  }
+}
+
+/* Additional Matrix-themed enhancements */
+/* Add Matrix-style digital rain on hover */
+.featured-post-card:hover .matrix-overlay::before,
+.post-card:hover .matrix-overlay::before,
+.category-post-card:hover .matrix-overlay::before {
+  content: "01001101 01100001 01110100 01110010 01101001 01111000";
+  animation: none;
+  background: none;
+  color: rgba(0, 255, 65, 0.2);
+  font-family: monospace;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-shadow: 0 0 5px rgba(0, 255, 65, 0.4);
+  word-break: break-all;
+  padding: 5px;
+  letter-spacing: 1px;
+  opacity: 0.7;
+}
+
+/* Add a consistent green border glow on hover */
+.featured-post-card:hover,
+.post-card:hover,
+.category-post-card:hover {
+  box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.3),
+    0 0 15px rgba(0, 255, 65, 0.5),
+    inset 0 0 10px rgba(0, 255, 65, 0.1);
+}
+
+/* Make featured post titles more prominent */
+.featured-post-card .post-title {
+  font-size: 1.8rem;
+  margin-bottom: 0.8rem;
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.4);
+}
+
+/* Updated featured post card for better image display */
+.featured-post-card .post-image {
+  height: 240px; /* Slightly larger than regular posts */
+}
+
+/* Add subtle image zoom effect on hover */
+.post-image, 
+.post-card-image, 
+.category-post-image {
+  transition: transform 0.5s ease-out;
+}
+
+.featured-post-card:hover .post-image,
+.post-card:hover .post-card-image,
+.category-post-card:hover .category-post-image {
+  transform: scale(1.05);
+}
+
+/* Add a subtle green border above post title */
+.post-title::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 30px;
+  height: 2px;
+  background: var(--matrix-green);
+  box-shadow: 0 0 8px var(--matrix-green);
+}
+
+/* Add Matrix-like scanlines for image hover effects */
+@keyframes scan {
+  0% {
+    background-position: 0 -100vh;
+  }
+  100% {
+    background-position: 0 100vh;
+  }
+}
+
+/* View More Button Styles */
+.view-more-container {
+  text-align: center;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px dashed rgba(0, 255, 65, 0.2);
+}
+
+.view-more-link {
+  display: inline-block;
+  padding: 0.6rem 1.5rem;
+  background-color: rgba(0, 255, 65, 0.1);
+  border: 1px solid rgba(0, 255, 65, 0.4);
+  color: var(--matrix-green);
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.view-more-link:hover {
+  background-color: rgba(0, 255, 65, 0.2);
+  box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
+  transform: translateY(-2px);
+  color: var(--matrix-light-green);
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.5);
+}
+
+.view-more-link::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  border-radius: 4px;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 5px,
+    rgba(0, 255, 65, 0.05) 5px,
+    rgba(0, 255, 65, 0.05) 10px
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.view-more-link:hover::after {
+  opacity: 1;
+}
+
+/* Enhance Baguio category styles */
+.category-section:nth-child(3) .category-title {
+  /* Target the Travel Tours section specifically */
+  color: var(--matrix-light-green);
+  text-shadow: 0 0 12px rgba(0, 255, 65, 0.6);
+}
+
+.category-section:nth-child(3) .category-post-card {
+  background-color: rgba(0, 25, 0, 0.75);
+  border-color: rgba(0, 255, 65, 0.3);
+}
+
+.category-section:nth-child(3) .category-post-card:hover {
+  box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(0, 255, 65, 0.6);
+}
+
+/* Baguio tag styling */
+.category-tag:contains("Baguio") {
+  background-color: rgba(0, 255, 65, 0.2);
+  border-color: rgba(0, 255, 65, 0.5);
+  font-weight: bold;
+}
+
+/* If the above doesn't work in all browsers, use this alternative */
+.post-categories span.category-tag:nth-child(2) {
+  background-color: rgba(0, 255, 65, 0.2);
+  border-color: rgba(0, 255, 65, 0.5);
+  font-weight: bold;
+}
+
+/* Featured Tour Styles */
+.featured-tour {
+  position: relative;
+  border-color: rgba(0, 255, 65, 0.4) !important;
+  background-color: rgba(0, 30, 0, 0.75) !important;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4), 0 0 10px rgba(0, 255, 65, 0.2) !important;
+}
+
+.featured-tour:hover {
+  transform: translateY(-8px) !important;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 255, 65, 0.4) !important;
+}
+
+.tour-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(0, 255, 65, 0.8);
+  color: #000;
+  font-size: 0.75rem;
+  font-weight: bold;
+  padding: 3px 8px;
+  border-radius: 3px;
+  z-index: 2;
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.featured-tour .post-title {
+  color: var(--matrix-light-green);
+  font-size: 1.5rem;
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.5);
+}
+
+.featured-tour .post-title::before {
+  width: 40px;
+  height: 3px;
+  background: var(--matrix-light-green);
+}
+
+/* Custom animation for featured tours */
+.featured-tour .matrix-overlay::before {
+  animation: scan 8s linear infinite;
+  opacity: 0.4;
+}
+
+.featured-tour .category-post-image {
+  height: 180px;
+}
+
+/* Highlight the category section with the featured tours */
+.category-section:has(.featured-tour) {
+  position: relative;
+  padding: 2rem 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 30, 0, 0),
+    rgba(0, 30, 0, 0.3),
+    rgba(0, 30, 0, 0)
+  );
+  margin: 2rem 0;
+  border-radius: 8px;
+}
+
+/* For browsers that don't support :has */
+.category-section:nth-child(3) {
+  position: relative;
+  padding: 2rem 0;
+  margin: 2rem 0;
+  border-radius: 8px;
+} 
