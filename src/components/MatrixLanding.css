@@ -1,236 +1,738 @@
-/* Global Styles */
-body {
-    margin: 0;
-    padding: 0;
-    background: black;
-    color: #00ff00;
-    font-family: monospace;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-  
-  /* Matrix Rain Background */
-  .rain-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -50;
-    background: rgba(0, 0, 0, 0.9);
-  }
-  
-  .rain-drop {
-    position: absolute;
-    color: #00ff00;
-    font-size: 1.2rem;
-    line-height: 1;
-    animation: rain linear infinite;
-  }
-  
-  /* Keyframes for rain effect */
-  @keyframes rain {
-    0% {
-      transform: translateY(-100%);
-      opacity: 0;
-    }
-    10% {
-      opacity: 1;
-    }
-    90% {
-      opacity: 1;
-    }
-    100% {
-      transform: translateY(100vh);
-      opacity: 0;
-    }
-  }
-  
-  /* Content Styles */
-  .content {
-    position: relative;
-    z-index: 1;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  /* Header Styles */
-  .header {
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(0, 255, 0, 0.2);
-  }
-  
-  .logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-  
-  .nav {
-    display: flex;
-    gap: 2rem;
-  }
-  
-  .nav-link {
-    color: #00ff00;
-    text-decoration: none;
-    transition: color 0.3s ease;
-  }
-  
-  /* Button Styles */
-  .button {
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-family: monospace;
-    transition: all 0.3s ease;
-  }
-  
-  .primary-button {
-    background: #00ff00;
-    color: black;
-  }
-  
-  .secondary-button {
-    background: transparent;
-    border: 1px solid #00ff00;
-    color: #00ff00;
-  }
-  
-  /* Hero Section */
-  .hero {
-    padding: 6rem 2rem;
-    text-align: center;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-  
-  .hero-title-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .hero-title {
-    font-size: 3.5rem;
-    text-align: center;
-    margin: 0.3rem;
-  }
-  
-  
-  .hero-text {
-    font-size: 1.2rem;
-    color: rgba(15, 158, 2, 0.8);
-    margin-bottom: 2rem;
-  }
-  
-  .button-group {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-  }
-  
-  /* Features Section */
-  .features {
-    padding: 4rem 2rem;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  
-  .feature-card {
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(0, 255, 0, 0.2);
-    padding: 2rem;
-    border-radius: 8px;
-    transition: transform 0.3s ease;
-  }
-  
-  /* CTA Section */
-  .cta {
-    padding: 4rem 2rem;
-  }
-  
-  .cta-content {
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(0, 255, 0, 0.2);
-    padding: 3rem;
-    border-radius: 8px;
-    text-align: center;
-    max-width: 600px;
-    margin: 0 auto;
-  }
-  
-  /* Footer */
-  .footer {
-    padding: 2rem;
-    text-align: center;
-    background: rgba(0, 0, 0, 0.8);
-    border-top: 1px solid rgba(0, 255, 0, 0.2);
-    margin-top: auto;
-  }
-  
-  .footer-text {
-    color: rgba(0, 255, 0, 0.6);
-    margin: 0.5rem 0;
-  }
+/* Performance optimization rules */
+.content {
+  transform: translateZ(0); /* Force hardware acceleration */
+  will-change: transform; /* Hint to browser about animated properties */
+  backface-visibility: hidden; /* Reduces paint complexity */
+  perspective: 1000px; /* Enable 3D rendering context */
+}
 
-  /*ABOUT ME */
-  .about-me {
-    background-color: rgba(0, 0, 0, 0.8);
-    color: rgb(242, 242, 247);
-    padding: 60px 20px;
-    text-align: center;
+/* Base Styles */
+:root {
+  --matrix-green: #00ff41;
+  --matrix-dark-green: #007718;
+  --accent-color: #00ff41;
+  --text-color: #e0e0e0;
+  --background-color: #000;
+  --card-bg: rgba(0, 15, 5, 0.8);
+  --card-hover-bg: rgba(0, 20, 10, 0.9);
+  --section-spacing: 6rem;
+  --border-radius: 0.5rem;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: 'Courier Prime', monospace;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* Matrix Rain Effect */
+.rain-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background-color: rgba(0, 0, 0, 0.9);
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.rain-drop {
+  position: absolute;
+  color: var(--matrix-green);
+  font-size: 1.2rem;
+  opacity: 0.7;
+  text-shadow: 0 0 8px var(--matrix-green);
+  animation: rain linear infinite;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+@keyframes rain {
+  0% {
+    transform: translateY(-100px);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+/* Cursor trail effect */
+.cursor-trail {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--matrix-green);
+  pointer-events: none;
+  opacity: 0.8;
+  box-shadow: 0 0 15px 5px rgba(0, 255, 65, 0.4);
+  z-index: 9999;
+  animation: fadeTrail 1s ease-out forwards;
+  mix-blend-mode: screen;
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+@keyframes fadeTrail {
+  0% { opacity: 0.8; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.2); }
+}
+
+/* Main Content Layout - Radnaabazar Style */
+.main-content {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow-x: hidden;
+  position: relative;
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Hero Section - Radnaabazar Style */
+.hero-section {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 2rem 1rem;
+  z-index: 1;
+  background: radial-gradient(
+    circle at center,
+    rgba(0, 20, 0, 0.2) 0%,
+    rgba(0, 0, 0, 0.95) 100%
+  ); /* Added subtle radial gradient for depth */
+}
+
+.hero-container {
+  position: relative;
+  max-width: 100%;
+  width: 100%;
+  margin: 0 auto;
+  z-index: 2;
+}
+
+.hero-rain-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+  pointer-events: none;
+}
+
+.hero-rain-drop {
+  position: absolute;
+  color: var(--matrix-green);
+  opacity: 0.8;
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.6);
+  z-index: 1;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  pointer-events: none;
+  font-weight: bold;
+}
+
+.hero-rain-drop.bright-green {
+  color: #4fff4f;
+  opacity: 0.9;
+  text-shadow: 0 0 15px #0f0, 0 0 25px rgba(0, 255, 65, 0.5);
+  font-weight: bold;
+}
+
+.hero-rain-drop.wiggle {
+  animation: wiggle 2s ease-in-out infinite alternate;
+}
+
+@keyframes wiggle {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(var(--wiggle-amount, 3px)); }
+}
+
+.hero-content {
+  text-align: center;
+  z-index: 10;
+  position: relative;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.hero-content .katakana-title-wrapper {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: visible;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.centered-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* For ScrambledTitle component */
+.main-hero-title {
+  position: relative;
+  z-index: 15 !important;
+  font-size: clamp(2.5rem, 5vw, 4rem) !important;
+  margin-bottom: 1rem;
+  color: #00ff00 !important;
+  text-shadow: none !important;
+  font-weight: bold !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  padding: 0.5rem !important;
+  border-radius: 5px !important;
+}
+
+@media (max-width: 768px) {
+  .main-hero-title {
+    font-size: clamp(1.8rem, 4vw, 2.2rem) !important;
+    letter-spacing: 0.05rem !important;
+    padding: 0.5rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-hero-title {
+    font-size: clamp(1.4rem, 3vw, 1.6rem) !important;
+    padding: 0.25rem !important;
+  }
+}
+
+/* Nickname container - Radnaabazar Style */
+.nickname-container {
+  margin: 2rem 0;
+  text-align: center;
+  animation: fadeIn 1s ease-in-out;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.nickname-label {
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+  font-weight: normal;
+}
+
+.nickname {
+  font-size: clamp(4rem, 10vw, 7rem);
+  color: var(--matrix-green);
+  margin: 0;
+  text-shadow: 0 0 20px rgba(0, 255, 65, 0.6);
+  font-weight: bold;
+  animation: pulseNickname 3s infinite alternate;
+}
+
+@keyframes pulseNickname {
+  0% { text-shadow: 0 0 20px rgba(0, 255, 65, 0.6); }
+  100% { text-shadow: 0 0 30px rgba(0, 255, 65, 0.9), 0 0 50px rgba(0, 255, 65, 0.5); }
+}
+
+/* Description container - Radnaabazar Style */
+.description-container {
+  margin: 1rem 0 3rem;
+  text-align: center;
+  animation: fadeIn 1.5s ease-in-out;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.hero-description {
+  font-size: clamp(1.3rem, 3vw, 2rem);
+  margin-bottom: 0.5rem;
+}
+
+.gray-text {
+  color: #aaa;
+}
+
+.highlight-text {
+  color: var(--matrix-green);
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+}
+
+.hero-subtitle {
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  color: #aaa;
+  margin-top: 0.5rem;
+}
+
+/* Contact Button - Radnaabazar Style */
+.contact-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  background-color: rgba(0, 25, 8, 0.8);
+  color: var(--matrix-green);
+  border: 1px solid var(--matrix-green);
+  padding: 0.8rem 1.5rem;
+  border-radius: var(--border-radius);
+  font-size: 1.1rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
+  cursor: pointer;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.contact-button:hover {
+  background-color: rgba(0, 40, 15, 0.9);
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+  transform: translateY(-3px);
+}
+
+.envelope {
+  font-size: 1.2rem;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* Section Container - Radnaabazar Style */
+.section-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  position: relative;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Section Titles - Radnaabazar Style */
+.section-title {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  color: var(--matrix-green);
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.4);
+}
+
+.section-subtitle {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  color: #aaa;
+  text-align: center;
+  margin-bottom: 3rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Hobbies Section - Radnaabazar Style */
+.hobbies-section {
+  padding: 4rem 0;
+  background-color: rgba(0, 10, 5, 0.3);
+  margin-bottom: var(--section-spacing);
+  position: relative;
+  overflow: hidden;
+}
+
+.hobbies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.hobby-card {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5), 0 0 10px rgba(0, 255, 65, 0.1);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 255, 65, 0.1);
+  height: 100%;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.hobby-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.6), 0 0 15px rgba(0, 255, 65, 0.2);
+  border-color: rgba(0, 255, 65, 0.3);
+  background-color: var(--card-hover-bg);
+}
+
+.hobby-card h3 {
+  color: var(--matrix-green);
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.hobby-card h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 3rem;
+  height: 2px;
+  background-color: var(--matrix-green);
+  box-shadow: 0 0 5px rgba(0, 255, 65, 0.5);
+}
+
+.hobby-card p {
+  color: #ddd;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* Components Section - Radnaabazar Style */
+.components-section {
+  padding: 4rem 0;
+  margin-bottom: var(--section-spacing);
+  position: relative;
+}
+
+.components-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+.component-item {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4), 0 0 8px rgba(0, 255, 65, 0.1);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 255, 65, 0.1);
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.component-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5), 0 0 12px rgba(0, 255, 65, 0.2);
+  border-color: rgba(0, 255, 65, 0.3);
+  background-color: var(--card-hover-bg);
+}
+
+.component-item h3 {
+  color: var(--matrix-green);
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.component-item p {
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+/* Daily Routine Section - Radnaabazar Style */
+.routine-section {
+  padding: 4rem 0;
+  background-color: rgba(0, 10, 5, 0.3);
+  margin-bottom: var(--section-spacing);
+  position: relative;
+}
+
+.routine-timeline {
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+  padding-left: 2rem;
+}
+
+.routine-timeline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 100%;
+  background-color: var(--matrix-green);
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+}
+
+.routine-item {
+  position: relative;
+  margin-bottom: 2rem;
+  padding-left: 1.5rem;
+  animation: fadeInLeft 0.5s ease-out both;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.routine-item::before {
+  content: '';
+  position: absolute;
+  top: 0.5rem;
+  left: -0.5rem;
+  width: 1rem;
+  height: 1rem;
+  background-color: var(--background-color);
+  border: 2px solid var(--matrix-green);
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+}
+
+.time {
+  font-size: 1.2rem;
+  color: var(--matrix-green);
+  margin-bottom: 0.3rem;
+  font-weight: bold;
+}
+
+.activity {
+  font-size: 1rem;
+  color: #ddd;
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Future Plans Section - Radnaabazar Style */
+.future-plans-section {
+  padding: 4rem 0;
+  margin-bottom: var(--section-spacing);
+  position: relative;
+}
+
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+.plan-item {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4), 0 0 8px rgba(0, 255, 65, 0.1);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 255, 65, 0.1);
+  color: var(--text-color);
+  font-size: 1.1rem;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.plan-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5), 0 0 12px rgba(0, 255, 65, 0.2);
+  border-color: rgba(0, 255, 65, 0.3);
+  background-color: var(--card-hover-bg);
+  color: var(--matrix-green);
+}
+
+/* Stats Section - Radnaabazar Style */
+.stats-section {
+  padding: 4rem 0;
+  background-color: rgba(0, 10, 5, 0.3);
+  margin-bottom: var(--section-spacing);
+  position: relative;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.stat-number {
+  font-size: clamp(2.5rem, 6vw, 3.5rem);
+  color: var(--matrix-green);
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  text-shadow: 0 0 15px rgba(0, 255, 65, 0.5);
+}
+
+.stat-label {
+  font-size: 1.1rem;
+  color: #ddd;
+}
+
+/* Footer - Radnaabazar Style */
+.footer {
+  padding: 5rem 0 3rem;
+  background-color: rgba(0, 5, 2, 0.8);
+  position: relative;
+  overflow: hidden;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.footer-content {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 0 1.5rem;
+}
+
+.thank-you-title {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  color: var(--matrix-green);
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.4);
+}
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin: 3rem 0;
+  flex-wrap: wrap;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.social-link {
+  color: #ddd;
+  text-decoration: none;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  position: relative;
+  padding-bottom: 5px;
+}
+
+.social-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--matrix-green);
+  transition: width 0.3s ease;
+  box-shadow: 0 0 5px rgba(0, 255, 65, 0.5);
+}
+
+.social-link:hover {
+  color: var(--matrix-green);
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.4);
+}
+
+.social-link:hover::after {
+  width: 100%;
+}
+
+.footer-text {
+  color: #888;
+  font-size: 1rem;
+  margin-top: 2rem;
+}
+
+/* Animation Classes */
+.fade-in-section {
+  animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Media Queries */
+@media (max-width: 992px) {
+  :root {
+    --section-spacing: 4rem;
   }
   
-  .about-me h2, .about-me h3 {
-    color: #ee0505; /* Matrix green color */
-    margin-bottom: 20px;
+  .hobbies-grid,
+  .components-grid,
+  .plans-grid,
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .section-container {
+    padding: 1.5rem;
   }
   
-  .about-me p {
-    font-size: 20px;
-    line-height: 1.6;
-    max-width: 800px;
-    margin: 0 auto 20px;
+  .routine-timeline {
+    padding-left: 1.5rem;
   }
   
-  .about-me ul {
-    list-style: none;
-    padding: 0;
+  .social-links {
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  :root {
+    --section-spacing: 3rem;
   }
   
-  .about-me li {
-    font-size: 18px;
-    margin-bottom: 10px;
+  .hero-section {
+    padding: 1rem;
   }
   
-  .cta {
-    margin-top: 30px;
+  .nickname {
+    font-size: clamp(3rem, 10vw, 5rem);
   }
   
-  .button {
-    background-color: #00ff00;
-    color: black;
-    padding: 10px 20px;
-    font-size: 18px;
-    border: none;
-    cursor: pointer;
-    transition: 0.3s;
+  .hobbies-grid,
+  .components-grid,
+  .plans-grid {
+    grid-template-columns: 1fr;
   }
   
-  .button:hover {
-    background-color: white;
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
   
-  
+  .contact-button {
+    padding: 0.7rem 1.2rem;
+    font-size: 1rem;
+  }
+}

@@ -1,102 +1,464 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
+import { Link } from "react-router-dom";
 import "./MatrixLanding.css"; // Import the extracted CSS file
 import ScrambledTitle from "./ScrambledTitle"; // Import the Scrambler component
+import Header from "./Header";
 
 const MatrixLanding = () => {
   const [characters, setCharacters] = useState([]);
+  const [heroCharacters, setHeroCharacters] = useState([]);
+  const [trails, setTrails] = useState([]);
+  const [titleTrigger, setTitleTrigger] = useState(false);
+  const trailId = useRef(0);
+  const timeoutIds = useRef([]);
+  const charsRef = useRef("アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789");
 
+  // Titles for the scrambled effect
+  const heroTitles = [
+    "Hello, I am Al Fernandez",
+    "Welcome to my Portfolio",
+    "Developer & Innovator",
+    "Tech Enthusiast",
+    "Matrix Coder"
+  ];
+
+  // Get a random katakana character
+  const getRandomChar = () => {
+    return charsRef.current[Math.floor(Math.random() * charsRef.current.length)];
+  };
+
+  // Matrix rain effect
   useEffect(() => {
-    const chars =
-      "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789";
+    const chars = charsRef.current;
     const charArray = Array.from(
-      { length: 50 },
-      () => chars[Math.floor(Math.random() * chars.length)]
+      { length: 60 }, // Reduced for better performance
+      () => ({
+        char: getRandomChar(),
+        x: Math.random() * 100,
+        delay: Math.random() * 3,
+        duration: Math.random() * 4 + 3,
+        opacity: 0.4 + Math.random() * 0.4
+      })
     );
     setCharacters(charArray);
+    
+    // Hero-specific rain effect for improved title visibility
+    const heroCharArray = Array.from(
+      { length: 80 }, // Doubled the number of characters for better visibility
+      () => ({
+        char: getRandomChar(),
+        x: Math.random() * 100,
+        y: Math.random() * 20 - 20, // Start above the visible area
+        speed: 0.15 + Math.random() * 0.6, // Slow speeds for better text readability
+        opacity: 0.4 + Math.random() * 0.3, // Significantly increased opacity
+        size: 0.5 + Math.random() * 0.5, // Larger characters
+        green: Math.random() > 0.7, // More bright characters (30% chance)
+        wiggle: Math.random() > 0.7, // More wiggle (30% chance)
+        wiggleAmount: Math.random() * 2 + 1,
+        changeFrequency: Math.random() * 0.05 // Slightly more frequent changes
+      })
+    );
+    setHeroCharacters(heroCharArray);
+
+    // Create a more efficient update mechanism using requestAnimationFrame
+    let rafId;
+    let lastUpdate = 0;
+    const updateInterval = 160; // Faster update rate for more dynamic effect
+    
+    const animateRain = (timestamp) => {
+      // Throttle updates to reduce CPU usage
+      if (timestamp - lastUpdate >= updateInterval) {
+        lastUpdate = timestamp;
+        
+        setHeroCharacters(prev => 
+          prev.map(char => ({
+            ...char,
+            y: char.y + char.speed * 0.8, // Move down faster for better visual effect
+            // Reset position if it goes off screen
+            ...(char.y > 120 ? { 
+              y: Math.random() * 20 - 20,
+              x: Math.random() * 100, // Randomize x position on reset
+              speed: 0.15 + Math.random() * 0.8, // Varied speeds on reset
+              green: Math.random() > 0.7, // 30% chance of bright green
+              opacity: 0.4 + Math.random() * 0.3, // Higher opacity for better visibility
+              wiggle: Math.random() > 0.7, // 30% chance of wiggle
+              wiggleAmount: Math.random() * 3 + 1, // More wiggle
+              size: 0.5 + Math.random() * 0.5, // Larger characters
+            } : {}),
+            // Occasionally change character for more dynamic effect
+            char: Math.random() > 0.92 ? getRandomChar() : char.char
+          }))
+        );
+      }
+      
+      rafId = requestAnimationFrame(animateRain);
+    };
+    
+    // Start animation
+    rafId = requestAnimationFrame(animateRain);
+    
+    // Periodically re-trigger the scramble effect for added visual impact
+    const titleInterval = setInterval(() => {
+      setTitleTrigger(prev => !prev);
+    }, 20000); // Every 20 seconds
+    
+    // Cleanup
+    return () => {
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+      }
+      clearInterval(titleInterval);
+    };
+  }, []);
+
+  // Cursor trail effect - optimized with throttling
+  const addTrail = useCallback((x, y) => {
+    const id = trailId.current++;
+    const newTrail = { id, x, y };
+    
+    setTrails(prevTrails => {
+      // Limit the number of trails to reduce rendering overhead
+      const limitedTrails = [...prevTrails, newTrail].slice(-15);
+      return limitedTrails;
+    });
+    
+    const timeoutId = setTimeout(() => {
+      setTrails(prevTrails => prevTrails.filter(trail => trail.id !== id));
+    }, 800); // Slightly shorter trail duration
+    
+    timeoutIds.current.push(timeoutId);
+  }, []);
+
+  const handleMouseMove = useCallback((e) => {
+    // Throttle to create trails every 80ms (reduced frequency)
+    if (!handleMouseMove.lastCall || Date.now() - handleMouseMove.lastCall > 80) {
+      const { clientX, clientY } = e;
+      addTrail(clientX, clientY);
+      handleMouseMove.lastCall = Date.now();
+    }
+  }, [addTrail]);
+
+  useEffect(() => {
+    window.addEventListener('mousemove', handleMouseMove);
+    
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      timeoutIds.current.forEach(id => clearTimeout(id));
+    };
+  }, [handleMouseMove]);
+
+  useEffect(() => {
+    // Add animation classes to sections for fade-in effects
+    const sections = document.querySelectorAll('section');
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('fade-in-section');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    
+    sections.forEach(section => {
+      observer.observe(section);
+    });
+    
+    return () => {
+      sections.forEach(section => {
+        observer.unobserve(section);
+      });
+    };
+  }, []);
+
+  useEffect(() => {
+    // Account for fixed header in the header scroll logic
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      
+      // Add some padding to account for fixed header (adjust as needed)
+      const sections = document.querySelectorAll('section');
+      if (sections.length > 0 && scrollPosition === 0) {
+        // Adjust first section padding when at the top
+        sections[0].style.paddingTop = '80px';
+      }
+    };
+    
+    // Initial call to set up sections
+    handleScroll();
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
     <div className="content">
       {/* Matrix Rain Background */}
       <div className="rain-container">
-        {characters.map((char, index) => (
+        {characters.map((data, index) => (
           <div
             key={index}
             className="rain-drop"
             style={{
-              left: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 2}s`,
-              animationDuration: `${Math.random() * 3 + 2}s`,
+              left: `${data.x}%`,
+              animationDelay: `${data.delay}s`,
+              animationDuration: `${data.duration}s`,
+              opacity: data.opacity
             }}
           >
-            {char}
+            {data.char}
           </div>
         ))}
       </div>
 
-      {/* Main Content */}
-      <header className="header">
-        <div className="logo">Al Fernandez</div>
-        <nav className="nav">
-          <a href="#" className="nav-link">
-            About
-          </a>
-          <a href="#" className="nav-link">
-            Share
-          </a>
-          <a href="#" className="nav-link">
-            My Contact
-          </a>
-        </nav>
-      </header>
+      {/* Cursor Trails */}
+      {trails.map(trail => (
+        <div
+          key={trail.id}
+          className="cursor-trail"
+          style={{
+            left: `${trail.x}px`,
+            top: `${trail.y}px`
+          }}
+        />
+      ))}
 
-      <main>
-        <section className="hero">
-          {/* Scrambled Title Animates Words One by One in a Loop */}
-          <ScrambledTitle texts={["Welcome To", "My Portfolio"]} delay={2000} />
+      {/* Fixed Header */}
+      <Header />
 
-          <p className="hero-text">All Around Services</p>
-          <div className="button-group">
-            <button className="button primary-button">My Skills</button>
-            <button className="button secondary-button">Learn More</button>
-          </div>
-
-          {/* About Me Section with Looped Scrambled Headings */}
-          <section className="about-me">
-            <ScrambledTitle texts={["About Me"]} delay={2000} loop />
-            <p>
-              Hi, I'm Al Fernandez, a passionate Computer Technician / Kind of Developer with a love for creating innovative digital experiences.
-              A TESDA Certified NC 2 Holder for Computer System Servicing, sharpening my problem-solving skills and staying up-to-date 
-              with the latest tech trends and Repairs.
-            </p>
-
-            <ScrambledTitle texts={["Skills & Expertise"]} delay={2000} />
-            <ul>
-              <li>Computer System Servicing</li>
-              <li>Server Management Specialist</li>
-              <li>UI/UX Design & Animation</li>
-              <li>Networking Connection for CISCO Integration Products</li>
-            </ul>
-
-            <ScrambledTitle texts={["Career Goals"]} delay={2000} loop />
-            <p>
-              My goal is to continue pushing the boundaries of web development, specializing in AI-powered applications 
-              and encouraging the freedom of repairing devices. I aim to contribute to open-source projects and organizing Tech tips.
-            </p>
-
-            <ScrambledTitle texts={["Fun Facts & Hobbies"]} delay={2000} loop />
-            <p>
-              When I’m not coding, I enjoy Gaming, Watching some Tech Repairs as well as experimenting with digital art. I believe 
-              in continuous learning!
-            </p>
-
-            <div className="cta">
-              <p>Want to collaborate or just say hi?</p>
-              <button className="button primary-button">Get in Touch</button>
+      <main className="main-content">
+        {/* Hero Section - Radnaabazar style */}
+        <section className="hero-section">
+          <div className="hero-container">
+            {/* Hero-specific Matrix Rain - Enhanced visibility */}
+            <div 
+              className="hero-rain-container"
+              style={{
+                backgroundColor: 'rgba(0, 5, 0, 0.3)', // Subtle green background tint
+                boxShadow: 'inset 0 0 80px rgba(0, 50, 0, 0.2)', // Inner glow effect
+              }}
+            >
+              {heroCharacters.map((data, index) => (
+                <div
+                  key={`hero-${index}`}
+                  className={`hero-rain-drop ${data.green ? 'bright-green' : ''} ${data.wiggle ? 'wiggle' : ''}`}
+                  style={{
+                    left: `${data.x}%`,
+                    top: `${data.y}%`,
+                    opacity: data.opacity,
+                    fontSize: `${data.size}rem`,
+                    filter: data.green ? 'drop-shadow(0 0 3px #00ff00)' : '', // Add glow to bright characters
+                    ...(data.wiggle && {
+                      '--wiggle-amount': `${data.wiggleAmount}px`
+                    })
+                  }}
+                >
+                  {data.char}
+                </div>
+              ))}
             </div>
-          </section>
+
+            <div className="hero-content centered-layout">
+              <div className="katakana-title-wrapper">
+                <ScrambledTitle 
+                  texts={heroTitles} 
+                  delay={5000} 
+                  firstPhraseDelay={6000} 
+                  loop={true} 
+                  className="main-hero-title"
+                  triggerRescramble={titleTrigger}
+                />
+              </div>
+              
+              <div className="nickname-container">
+                <h2 className="nickname-label">My nickname is</h2>
+                <h2 className="nickname">Al</h2>
+              </div>
+              
+              <div className="description-container">
+                <p className="hero-description">
+                  <span className="gray-text">Al is</span> <span className="highlight-text">Innovative</span>
+                </p>
+                <p className="hero-subtitle">Built this website with love</p>
+              </div>
+              
+              <a 
+                href="#contact" 
+                className="contact-button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  const contactSection = document.getElementById('contact');
+                  if (contactSection) {
+                    contactSection.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+              >
+                <span>Write a Letter</span>
+                <span className="envelope">✉️</span>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* Hobbies Section - Radnaabazar style */}
+        <section className="hobbies-section">
+          <div className="section-container">
+            <h2 className="section-title">Al's Hobbies</h2>
+            <p className="section-subtitle">I like to stay active. New hobbies are added almost every year.</p>
+            
+            <div className="hobbies-grid">
+              <div className="hobby-card">
+                <h3>Computer Tech</h3>
+                <p>There's something special about working with computers. I enjoy troubleshooting hardware issues and developing software solutions.</p>
+              </div>
+              
+              <div className="hobby-card">
+                <h3>Gaming & Tech</h3>
+                <p>I enjoy gaming and keeping up with the latest technology trends. It's not just entertainment, but a way to understand user experience.</p>
+              </div>
+              
+              <div className="hobby-card">
+                <h3>Music Enthusiast</h3>
+                <p>I also enjoy listening to various music genres and experimenting with digital music production in my spare time.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Components Section - Radnaabazar style */}
+        <section className="components-section">
+          <div className="section-container">
+            <h2 className="section-title">Components of Al's Life</h2>
+            
+            <div className="components-grid">
+              <div className="component-item">
+                <h3>Computer, IT</h3>
+                <p>Interest, Work</p>
+              </div>
+              
+              <div className="component-item">
+                <h3>Web Dev</h3>
+                <p>Coding, Design</p>
+              </div>
+              
+              <div className="component-item">
+                <h3>Tech Repair</h3>
+                <p>Hardware, Solutions</p>
+              </div>
+              
+              <div className="component-item">
+                <h3>Gaming</h3>
+                <p>Entertainment, Strategy</p>
+              </div>
+              
+              <div className="component-item">
+                <h3>Networking</h3>
+                <p>CISCO, Infrastructure</p>
+              </div>
+              
+              <div className="component-item">
+                <h3>AI & ML</h3>
+                <p>Learning, Future</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Daily Routine Section - Radnaabazar style */}
+        <section className="routine-section">
+          <div className="section-container">
+            <h2 className="section-title">Daily Routine</h2>
+            
+            <div className="routine-timeline">
+              <div className="routine-item">
+                <div className="time">6:00 AM</div>
+                <div className="activity">Wake up</div>
+              </div>
+              
+              <div className="routine-item">
+                <div className="time">8:00 AM</div>
+                <div className="activity">Work</div>
+              </div>
+              
+              <div className="routine-item">
+                <div className="time">12:00 PM</div>
+                <div className="activity">Lunch</div>
+              </div>
+              
+              <div className="routine-item">
+                <div className="time">5:00 PM</div>
+                <div className="activity">Tech Projects</div>
+              </div>
+              
+              <div className="routine-item">
+                <div className="time">7:00 PM</div>
+                <div className="activity">Gaming/Relaxing</div>
+              </div>
+              
+              <div className="routine-item">
+                <div className="time">10:00 PM</div>
+                <div className="activity">Sleep</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Future Plans Section - Radnaabazar style */}
+        <section className="future-plans-section">
+          <div className="section-container">
+            <h2 className="section-title">Future Plans</h2>
+            
+            <div className="plans-grid">
+              <div className="plan-item">Master AI Development</div>
+              <div className="plan-item">Learn Cloud Architecture</div>
+              <div className="plan-item">Start a Tech Channel</div>
+              <div className="plan-item">Build a Tech Community</div>
+              <div className="plan-item">Travel to Tech Conferences</div>
+              <div className="plan-item">Learn Japanese</div>
+              <div className="plan-item">Build an AI Assistant</div>
+              <div className="plan-item">Create Educational Content</div>
+            </div>
+          </div>
+        </section>
+
+        {/* Stats Section - Radnaabazar style */}
+        <section className="stats-section">
+          <div className="section-container">
+            <div className="stats-grid">
+              <div className="stat-item">
+                <div className="stat-number">3</div>
+                <div className="stat-label">Projects Completed</div>
+              </div>
+              
+              
+              <div className="stat-item">
+                <div className="stat-number">3</div>
+                <div className="stat-label">Web Applications</div>
+              </div>
+              
+              <div className="stat-item">
+                <div className="stat-number">10+</div>
+                <div className="stat-label">Tech Skills</div>
+              </div>
+            </div>
+          </div>
         </section>
       </main>
+
+      {/* Footer Section - Radnaabazar style */}
+      <footer id="contact" className="footer">
+        <div className="footer-content">
+          <h2 className="thank-you-title">For visiting my profile</h2>
+          <h2 className="thank-you-title">Thank you.</h2>
+          <div className="social-links">
+            <a href="https://github.com/Alteryxx" className="social-link">GitHub</a>
+            <a href="https://www.linkedin.com/in/al-fernandnez-2b0267125/" className="social-link">LinkedIn</a>
+            <a href="https://www.facebook.com/Shomaaayyy" className="social-link">Facebook</a>
+            <a href="#" className="social-link">Email</a>
+          </div>
+          <p className="footer-text">Al Fernandez - Portfolio 2025</p>
+        </div>
+      </footer>
     </div>
   );
 };
