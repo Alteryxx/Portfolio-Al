@@ -1,0 +1,171 @@
+/* ScrambledTitle Component Styles */
+.scrambled-title {
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  text-align: center;
+  color: #00ff00;
+  text-shadow: none;
+  letter-spacing: 2px;
+  line-height: 1.2;
+  position: relative;
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
+  transition: all 0.3s ease;
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  /* No hover styles needed */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* New style for each line in multi-line titles */
+.scrambled-line {
+  width: 100%;
+  margin-bottom: 0.5rem;
+  overflow: visible;
+}
+
+/* Styling for the individual scrambled characters */
+.scrambled-title .dud {
+  color: rgba(0, 255, 0, 0.7);  
+  opacity: 0.8;
+  animation: glitch 100ms linear;
+  position: relative;
+  display: inline-block;
+}
+
+/* Add new class for the text span */
+.scrambled-text {
+  display: inline-block;
+  max-width: 100%;
+  overflow-wrap: break-word;
+  white-space: normal; /* Allow wrapping on smaller screens */
+  text-align: center;
+}
+
+/* Style for static text in multi-line mode */
+.scrambled-text.static-text {
+  color: #00ff41;
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+  min-height: 1.2em; /* Ensure consistent height */
+}
+
+/* Special styling for the main hero title */
+.main-hero-title {
+  font-size: 3.5rem;
+  letter-spacing: 0.2rem;
+  margin: 0 auto 1.5rem;
+  padding: 1rem;
+  position: relative;
+  z-index: 10;
+  max-width: 100%;
+  display: block;
+  text-transform: uppercase;
+  line-height: 1.2;
+  min-height: 4rem; /* Reduced minimum height */
+  font-family: 'Roboto Mono', 'Courier New', monospace;
+}
+
+/* Special styling for professional page */
+.professional-hero-content .main-hero-title .scrambled-line {
+  margin-bottom: 0.2rem;
+}
+
+.professional-hero-content .main-hero-title .scrambled-text {
+  font-size: 2.8rem;
+  text-shadow: 0 0 15px rgba(0, 255, 65, 0.5);
+}
+
+/* For single line rotation, ensure only one title shows at a time */
+.main-hero-title:not([data-multiline="true"]) .scrambled-line {
+  height: auto;
+  width: 100%;
+}
+
+/* Glitch animation for character transitions */
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+    opacity: 1;
+  }
+  20% {
+    transform: translate(-2px, 2px);
+    opacity: 0.8;
+  }
+  40% {
+    transform: translate(-2px, -2px);
+    opacity: 0.9;
+  }
+  60% {
+    transform: translate(2px, 2px);
+    opacity: 1;
+  }
+  80% {
+    transform: translate(2px, -2px);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(0);
+    opacity: 1;
+  }
+}
+
+/* Katakana title wrapper - removed green lines */
+.katakana-title-wrapper {
+  position: relative;
+  width: 100%;
+  padding: 1rem 0;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+/* Removed green lines before and after */
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .main-hero-title {
+    font-size: 2.2rem;
+    letter-spacing: 0.1rem;
+    min-height: 3.5rem;
+    padding: 0.5rem;
+    width: 100%;
+    overflow-x: hidden;
+    line-height: 1.3;
+  }
+  
+  .scrambled-text {
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
+  }
+  
+  .professional-hero-content .main-hero-title .scrambled-text {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-hero-title {
+    font-size: 1.6rem;
+    letter-spacing: 0.05rem;
+    min-height: 3rem;
+    padding: 0.5rem;
+    width: 100%;
+    overflow-x: hidden;
+  }
+  
+  .professional-hero-content .main-hero-title .scrambled-text {
+    font-size: 1.6rem;
+  }
+  
+  .katakana-title-wrapper {
+    padding: 0.5rem 0;
+    margin-bottom: 1rem;
+  }
+} 
