@@ -39,6 +39,8 @@ body {
   overflow-x: hidden;
   background-color: #000000 !important;
   color: var(--text-color);
+  position: relative;
+  z-index: 1;
 }
 
 h1 {
@@ -102,4 +104,9 @@ body {
     border-color: var(--matrix-green);
     background-color: rgba(0, 255, 65, 0.1);
   }
+}
+
+main, section, header, footer {
+  position: relative;
+  z-index: 1;
 }
