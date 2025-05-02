@@ -239,85 +239,101 @@ const MatrixLoader = ({ isLoading }) => {
     }
   }, [shouldRender, fadeOut, gridSize, isMobile]);
   
-  // Don't render anything if not needed
-  if (!shouldRender) return null;
-  
-  return (
-    <div className={`matrix-loader ${fadeOut ? 'fade-out' : ''}`}>
+  return shouldRender ? (
+    <div className={`matrix-loader ${fadeOut ? 'fade-out' : ''}`} style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      zIndex: 9999
+    }}>
       <div className="matrix-rain-effect"></div>
       
       <div className="loader-overlay">
-        {/* Static background grid */}
-        {characters.map((item, index) => (
+        {/* Static background characters */}
+        {characters.map((data, index) => (
           <div
-            key={`grid-${index}`}
-            className={`loader-char ${item.glitch ? 'glitch' : ''}`}
+            key={`char-${index}`}
+            className={`loader-char ${data.glitch ? 'glitch' : ''}`}
             style={{
-              top: `${(item.row * (isMobile ? 9 : 5)) + 5}%`,
-              left: `${(item.col * (isMobile ? 6 : 3)) + 2}%`,
-              animationDelay: `${item.delay}s`,
-              animationDuration: `${item.duration}s`,
+              left: `${((data.col / gridSize.cols) * 100)}%`,
+              top: `${((data.row / gridSize.rows) * 100)}%`,
+              animationDelay: `${data.delay}s`,
+              animationDuration: `${data.duration}s`
             }}
           >
-            {item.char}
+            {data.char}
           </div>
         ))}
         
-        {/* Highlighted characters */}
-        {highlightChars.map((item, index) => (
+        {/* Highlight characters */}
+        {highlightChars.map((data, index) => (
           <div
             key={`highlight-${index}`}
-            className={`highlight-char ${item.glow ? 'glow' : ''}`}
+            className={`highlight-char ${data.glow ? 'glow' : ''}`}
             style={{
-              top: `${item.y}%`,
-              left: `${item.x}%`,
-              transform: `scale(${item.scale})`,
+              left: `${data.x}%`,
+              top: `${data.y}%`,
+              transform: `scale(${data.scale})`
             }}
           >
-            {item.char}
+            {data.char}
           </div>
         ))}
         
         {/* Falling code streams */}
         {codeStreams.map((stream, streamIndex) => (
-          <div 
+          <div
             key={`stream-${streamIndex}`}
             className="code-stream"
             style={{
-              top: `${stream.y}%`,
               left: `${stream.x}%`,
+              top: `${stream.y}%`
             }}
           >
-            {stream.chars.map((char, charIndex) => (
-              <div 
-                key={`stream-${streamIndex}-char-${charIndex}`}
+            {stream.chars.map((charData, charIndex) => (
+              <div
+                key={`stream-char-${streamIndex}-${charIndex}`}
                 className="stream-char"
-                style={{
-                  opacity: char.opacity,
-                  top: `${charIndex * 20}px`
-                }}
+                style={{ opacity: charData.opacity }}
               >
-                {char.char}
+                {charData.char}
               </div>
             ))}
           </div>
         ))}
+      </div>
+      
+      {/* Loading message */}
+      <div className="loader-message">
+        <span className="message-bracket">[</span>
+        <span className="message-text">{loadingText}</span>
+        <span className="message-bracket">]</span>
         
-        {/* Central loading message */}
-        <div className="loader-message">
-          <div className="message-bracket">[</div>
-          <div className="message-text">{loadingText}</div>
-          <div className="message-bracket">]</div>
-          <div className="loading-dots">
-            <span className="dot"></span>
-            <span className="dot"></span>
-            <span className="dot"></span>
-          </div>
-          <div className="access-message">Accessing Mainframe</div>
+        <div className="loading-dots">
+          <div className="dot"></div>
+          <div className="dot"></div>
+          <div className="dot"></div>
+        </div>
+        
+        <div className="access-message">
+          {fadeOut ? "CONNECTION TERMINATED" : "ESTABLISHING CONNECTION"}
         </div>
       </div>
+      
+      {/* SVG filter for glow effect */}
+      <svg width="0" height="0">
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="2.5" result="coloredBlur" />
+          <feMerge>
+            <feMergeNode in="coloredBlur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </svg>
     </div>
-  );
+  ) : null;
 };
 
 export default MatrixLoader; 

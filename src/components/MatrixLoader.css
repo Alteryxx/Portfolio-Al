@@ -44,7 +44,7 @@
 
 /* Background matrix rain effect */
 .matrix-rain-effect {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -52,15 +52,17 @@
   background: radial-gradient(ellipse at center, rgba(0,10,0,0.4) 0%, rgba(0,0,0,0.9) 100%);
   opacity: 0.5;
   pointer-events: none;
+  z-index: 1;
 }
 
 .loader-overlay {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   overflow: hidden;
+  z-index: 2;
 }
 
 /* Static background characters */
