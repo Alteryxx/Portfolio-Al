@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import "./Professional.css";
 import Header from "./Header";
-import ScrambledTitle from "./ScrambledTitle";
+import GlitchText from "./GlitchText";
 
 const Professional = () => {
   const [heroCharacters, setHeroCharacters] = useState([]);
@@ -14,7 +14,7 @@ const Professional = () => {
     return charsRef.current[Math.floor(Math.random() * charsRef.current.length)];
   };
 
-  // Matrix rain effect - reduced opacity for more subtle effect
+  // Matrix rain effect 
   useEffect(() => {
     // Matrix rain effect for background
     const heroCharArray = Array.from(
@@ -205,7 +205,7 @@ const Professional = () => {
           </div>
         ))}
       </div>
-      
+
       {/* Fixed Header */}
       <Header />
 
@@ -214,14 +214,23 @@ const Professional = () => {
         <section className="professional-hero">
           <div className="professional-hero-content">
             <div className="katakana-title-wrapper">
-              {/* Split the title into two lines for better display */}
-              <ScrambledTitle
-                texts={["Hello again, I am", "Al Fernandez"]}
-                delay={3000}
-                firstPhraseDelay={2000}
-                className="main-hero-title"
-                loop={false}
-              />
+              {/* Replace the ScrambledTitle with static text and GlitchText */}
+              <h1 className="main-hero-title">
+                Hello again, I am <GlitchText 
+                  primaryText="Al Fernandez" 
+                  alternateTexts={[
+                    "a Developer",
+                    "a Tech Specialist", 
+                    "a Computer Technician",
+                    "a Web Developer",
+                    "an IT Professional",
+                    "a Network Specialist"
+                  ]}
+                  interval={5000}
+                  glitchDuration={2000}
+                  className="centered-glitch"
+                />
+              </h1>
             </div>
             <div className="professional-intro">
               <p className="professional-tagline">
