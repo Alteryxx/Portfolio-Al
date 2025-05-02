@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getIndustrialTourPosts, getPostById } from "../data/blogData";
 import Header from "./Header";
 import "./IndustrialToursPage.css";
@@ -8,6 +9,8 @@ const IndustrialToursPage = () => {
   const [selectedPost, setSelectedPost] = useState(null);
   const [posts, setPosts] = useState([]);
   const charsRef = useRef("アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789");
+  const location = useLocation();
+  const navigate = useNavigate();
 
   // Get a random katakana character
   const getRandomChar = () => {
@@ -83,33 +86,22 @@ const IndustrialToursPage = () => {
     return () => cancelAnimationFrame(animationId);
   }, []);
 
-  // Check if the URL has a post ID parameter
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
+    const urlParams = new URLSearchParams(location.search);
     const postId = urlParams.get('id');
     
     if (postId) {
       const post = getPostById(parseInt(postId));
       if (post) {
         setSelectedPost(post);
-        // Scroll to top when selecting a post
         window.scrollTo(0, 0);
       }
     }
-  }, []);
-
-  const handlePostClick = (postId) => {
-    const post = getPostById(postId);
-    setSelectedPost(post);
-    // Update URL without refreshing the page
-    window.history.pushState({}, '', `?id=${postId}`);
-    // Scroll to top
-    window.scrollTo(0, 0);
-  };
+  }, [location.search]);
 
   const handleBackClick = () => {
     setSelectedPost(null);
-    window.history.pushState({}, '', window.location.pathname);
+    navigate('/industrial-tours');
   };
 
   return (
@@ -196,7 +188,6 @@ const IndustrialToursPage = () => {
                     <div 
                       key={post.id} 
                       className="tour-card featured-tour"
-                      onClick={() => handlePostClick(post.id)}
                     >
                       <div 
                         className="tour-image" 
@@ -210,7 +201,7 @@ const IndustrialToursPage = () => {
                         <p className="tour-excerpt">{post.excerpt}</p>
                         <div className="tour-meta">
                           <span className="tour-date">{post.date}</span>
-                          <button className="view-tour-button">View Details</button>
+                          <Link to={`/industrial-tours?id=${post.id}`} className="view-tour-button">View Details</Link>
                         </div>
                       </div>
                     </div>
@@ -227,9 +218,9 @@ const IndustrialToursPage = () => {
         <div className="footer-content">
           <h2 className="thank-you-title">Thank you for exploring Industrial Tours</h2>
           <div className="social-links">
-            <a href="#" className="social-link">GitHub</a>
-            <a href="#" className="social-link">LinkedIn</a>
-            <a href="#" className="social-link">Twitter</a>
+            <a href="https://github.com/Alteryxx" className="social-link">GitHub</a>
+            <a href="https://www.linkedin.com/in/al-fernandnez-2b0267125/" className="social-link">LinkedIn</a>
+            <a href="https://www.facebook.com/Shomaaayyy" className="social-link">Facebook</a>
             <a href="#" className="social-link">Email</a>
           </div>
           <p className="footer-text">Al Fernandez - Portfolio 2025</p>

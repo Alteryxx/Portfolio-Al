@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getTravelTourPosts, getPostById } from "../data/blogData";
 import Header from "./Header";
 import "./TravelToursPage.css";
@@ -8,6 +9,8 @@ const TravelToursPage = () => {
   const [selectedPost, setSelectedPost] = useState(null);
   const [posts, setPosts] = useState([]);
   const charsRef = useRef("アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789");
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const getRandomChar = () => {
     return charsRef.current[Math.floor(Math.random() * charsRef.current.length)];
@@ -76,7 +79,7 @@ const TravelToursPage = () => {
   }, []);
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
+    const urlParams = new URLSearchParams(location.search);
     const postId = urlParams.get('id');
     
     if (postId) {
@@ -86,18 +89,11 @@ const TravelToursPage = () => {
         window.scrollTo(0, 0);
       }
     }
-  }, []);
-
-  const handlePostClick = (postId) => {
-    const post = getPostById(postId);
-    setSelectedPost(post);
-    window.history.pushState({}, '', `?id=${postId}`);
-    window.scrollTo(0, 0);
-  };
+  }, [location.search]);
 
   const handleBackClick = () => {
     setSelectedPost(null);
-    window.history.pushState({}, '', window.location.pathname);
+    navigate('/travel-tours');
   };
 
   return (
@@ -179,8 +175,7 @@ const TravelToursPage = () => {
                   {posts.map(post => (
                     <div 
                       key={post.id} 
-                      className="tour-card featured-tour" 
-                      onClick={() => handlePostClick(post.id)}
+                      className="tour-card featured-tour"
                     >
                       <div 
                         className="tour-image" 
@@ -194,7 +189,7 @@ const TravelToursPage = () => {
                         <p className="tour-excerpt">{post.excerpt}</p>
                         <div className="tour-meta">
                           <span className="tour-date">{post.date}</span>
-                          <button className="view-tour-button">View Details</button>
+                          <Link to={`/travel-tours?id=${post.id}`} className="view-tour-button">View Details</Link>
                         </div>
                       </div>
                     </div>
@@ -210,9 +205,9 @@ const TravelToursPage = () => {
         <div className="footer-content">
           <h2 className="thank-you-title">Thank you for exploring Baguio</h2>
           <div className="social-links">
-            <a href="#" className="social-link">GitHub</a>
-            <a href="#" className="social-link">LinkedIn</a>
-            <a href="#" className="social-link">Twitter</a>
+            <a href="https://github.com/Alteryxx" className="social-link">GitHub</a>
+            <a href="https://www.linkedin.com/in/al-fernandnez-2b0267125/" className="social-link">LinkedIn</a>
+            <a href="https://www.facebook.com/Shomaaayyy" className="social-link">Facebook</a>
             <a href="#" className="social-link">Email</a>
           </div>
           <p className="footer-text">Al Fernandez - Portfolio 2025</p>

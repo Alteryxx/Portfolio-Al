@@ -82,6 +82,7 @@ function MainLayout() {
           <Route path="/" element={<MatrixLanding />} />
           <Route path="/professional" element={<Professional />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:id" element={<Blog />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/travel-tours" element={<TravelToursPage />} />
           <Route path="/industrial-tours" element={<IndustrialToursPage />} />
