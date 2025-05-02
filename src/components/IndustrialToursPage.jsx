@@ -12,6 +12,11 @@ const IndustrialToursPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  // Scroll to top on component mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   // Get a random katakana character
   const getRandomChar = () => {
     return charsRef.current[Math.floor(Math.random() * charsRef.current.length)];
@@ -90,12 +95,16 @@ const IndustrialToursPage = () => {
     const urlParams = new URLSearchParams(location.search);
     const postId = urlParams.get('id');
     
+    window.scrollTo(0, 0);
+    
     if (postId) {
       const post = getPostById(parseInt(postId));
       if (post) {
         setSelectedPost(post);
-        window.scrollTo(0, 0);
       }
+    } else {
+      // Reset selected post when navigating to the main tours page
+      setSelectedPost(null);
     }
   }, [location.search]);
 
