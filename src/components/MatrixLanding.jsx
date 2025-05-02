@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
 import "./MatrixLanding.css"; // Import the extracted CSS file
 import ScrambledTitle from "./ScrambledTitle"; // Import the Scrambler component
+import GlitchText from "./GlitchText"; // Import our new GlitchText component
 import Header from "./Header";
 
 const MatrixLanding = () => {
@@ -12,15 +13,6 @@ const MatrixLanding = () => {
   const trailId = useRef(0);
   const timeoutIds = useRef([]);
   const charsRef = useRef("アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789");
-
-  // Titles for the scrambled effect
-  const heroTitles = [
-    "Hello, I am Al Fernandez",
-    "Welcome to my Portfolio",
-    "Developer & Innovator",
-    "Tech Enthusiast",
-    "Matrix Coder"
-  ];
 
   // Get a random katakana character
   const getRandomChar = () => {
@@ -78,7 +70,7 @@ const MatrixLanding = () => {
             ...(char.y > 120 ? { 
               y: Math.random() * 20 - 20,
               x: Math.random() * 100, // Randomize x position on reset
-              speed: 0.15 + Math.random() * 0.8, // Varied speeds on reset
+              speed: 0.15 + Math.random() * 0.7, // Varied speeds on reset
               green: Math.random() > 0.7, // 30% chance of bright green
               opacity: 0.4 + Math.random() * 0.3, // Higher opacity for better visibility
               wiggle: Math.random() > 0.7, // 30% chance of wiggle
@@ -227,15 +219,15 @@ const MatrixLanding = () => {
       <Header />
 
       <main className="main-content">
-        {/* Hero Section - Radnaabazar style */}
+        {/* Hero Section  */}
         <section className="hero-section">
           <div className="hero-container">
             {/* Hero-specific Matrix Rain - Enhanced visibility */}
             <div 
               className="hero-rain-container"
               style={{
-                backgroundColor: 'rgba(0, 5, 0, 0.3)', // Subtle green background tint
-                boxShadow: 'inset 0 0 80px rgba(0, 50, 0, 0.2)', // Inner glow effect
+                backgroundColor: 'rgba(0, 0, 0, 0.5)', // Changed from green tint to pure black
+                boxShadow: 'inset 0 0 80px rgba(0, 0, 0, 0.3)', // Removed green tint from glow
               }}
             >
               {heroCharacters.map((data, index) => (
@@ -258,49 +250,89 @@ const MatrixLanding = () => {
               ))}
             </div>
 
-            <div className="hero-content centered-layout">
-              <div className="katakana-title-wrapper">
-                <ScrambledTitle 
-                  texts={heroTitles} 
-                  delay={5000} 
-                  firstPhraseDelay={6000} 
-                  loop={true} 
-                  className="main-hero-title"
-                  triggerRescramble={titleTrigger}
-                />
+            <div className="hero-content centered-layout" style={{
+              backgroundColor: "transparent",
+              boxShadow: "none",
+              backdropFilter: "none"
+            }}>
+              <div className="katakana-title-wrapper" style={{
+                backgroundColor: "transparent",
+                boxShadow: "none"
+              }}>
+                <h1 className="main-hero-title" style={{
+                  backgroundColor: "transparent",
+                  boxShadow: "none",
+                  textAlign: "center",
+                  width: "100%",
+                  maxWidth: "100vw",
+                  margin: "0 auto",
+                  padding: "0"
+                }}>
+                  <div style={{ marginBottom: "1rem", fontSize: "clamp(1.8rem, 5vw, 2.5rem)" }}>Hello, I am</div>
+                  <div style={{ 
+                    position: "relative", 
+                    width: "100%",
+                    height: "80px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    overflow: "visible"
+                  }}>
+                    <GlitchText 
+                      primaryText="Al Fernandez" 
+                      alternateTexts={[
+                        "a Developer",
+                        "a Tech Enthusiast", 
+                        "a Gamer",
+                        "a Problem Solver",
+                        "a PC Technician",
+                        "a Web Creator"
+                      ]}
+                      interval={4000}
+                      glitchDuration={2000}
+                      className="centered-glitch"
+                    />
+                  </div>
+                </h1>
               </div>
               
-              <div className="nickname-container">
+              {/* Adding a separator div with fixed height to prevent layout shifts */}
+              <div style={{ height: "5rem", width: "100%" }}></div>
+              
+              <div className="nickname-container" style={{ 
+                position: "relative", 
+                zIndex: 10,
+                padding: "1rem",
+                backgroundColor: "transparent",
+                borderRadius: "5px",
+                /* Added to prevent layout shifts */
+                transform: "translateZ(0)",
+                willChange: "transform",
+                isolation: "isolate"
+              }}>
                 <h2 className="nickname-label">My nickname is</h2>
                 <h2 className="nickname">Al</h2>
               </div>
               
               <div className="description-container">
                 <p className="hero-description">
-                  <span className="gray-text">Al is</span> <span className="highlight-text">Innovative</span>
+                  <span className="gray-text">Al is</span> <span className="highlight-text">Gamer / Developer / Tech Enthusiast</span>
                 </p>
                 <p className="hero-subtitle">Built this website with love</p>
               </div>
               
-              <a 
-                href="#contact" 
+              <Link 
+                to="/contact" 
                 className="contact-button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  const contactSection = document.getElementById('contact');
-                  if (contactSection) {
-                    contactSection.scrollIntoView({ behavior: 'smooth' });
-                  }
-                }}
               >
                 <span>Write a Letter</span>
                 <span className="envelope">✉️</span>
-              </a>
+              </Link>
             </div>
           </div>
         </section>
 
-        {/* Hobbies Section - Radnaabazar style */}
+        {/* Hobbies Section */}
         <section className="hobbies-section">
           <div className="section-container">
             <h2 className="section-title">Al's Hobbies</h2>
