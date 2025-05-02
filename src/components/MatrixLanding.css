@@ -29,40 +29,50 @@ body, html {
   line-height: 1.6;
 }
 
-/* Matrix Rain Effect */
-.rain-container {
+/* Global matrix background (like Professional.css) */
+.matrix-background {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1;
+  z-index: 0; /* Ensure it's behind content but visible */
   overflow: hidden;
   pointer-events: none;
-  background-color: rgba(0, 0, 0, 0.9);
+  background-color: rgba(0, 5, 0, 0.1); /* Subtle background tint */
+  box-shadow: inset 0 0 80px rgba(0, 30, 0, 0.15); /* Softer inner glow */
   transform: translateZ(0);
   will-change: transform;
   backface-visibility: hidden;
 }
 
-.rain-drop {
+/* Matrix drop styles (like Professional.css) */
+.matrix-drop {
   position: absolute;
   color: var(--matrix-green);
-  font-size: 1.2rem;
-  opacity: 0.7;
-  text-shadow: 0 0 8px var(--matrix-green);
-  animation: rain linear infinite;
+  font-size: 1.2rem; /* Default size, overridden by inline style */
+  font-weight: normal;
+  opacity: 0.25; /* Default opacity, overridden by inline style */
+  text-shadow: 0 0 4px rgba(0, 255, 65, 0.2); /* Softer glow */
+  pointer-events: none;
   will-change: transform, opacity;
   backface-visibility: hidden;
 }
 
-@keyframes rain {
-  0% {
-    transform: translateY(-100px);
-  }
-  100% {
-    transform: translateY(100vh);
-  }
+.matrix-drop.bright-green {
+  color: #4fff4f; /* Use a slightly lighter green */
+  opacity: 0.35; /* Reduced opacity for bright ones */
+  text-shadow: 0 0 6px rgba(0, 255, 65, 0.4), 0 0 10px rgba(0, 255, 65, 0.2); /* Softer glow */
+}
+
+.matrix-drop.wiggle {
+  animation: wiggle 2s ease-in-out infinite alternate; /* Reuse existing wiggle animation */
+}
+
+/* Keep existing wiggle keyframes if they match, otherwise define */
+@keyframes wiggle {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(var(--wiggle-amount, 3px)); } /* Adjusted to match JS variable */
 }
 
 /* Cursor trail effect */
@@ -126,51 +136,9 @@ body, html {
   z-index: 2;
 }
 
-.hero-rain-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  z-index: 1;
-  transform: translateZ(0);
-  will-change: transform;
-  backface-visibility: hidden;
-  pointer-events: none;
-}
-
-.hero-rain-drop {
-  position: absolute;
-  color: var(--matrix-green);
-  opacity: 0.8;
-  text-shadow: 0 0 8px rgba(0, 255, 65, 0.6);
-  z-index: 1;
-  will-change: transform, opacity;
-  backface-visibility: hidden;
-  pointer-events: none;
-  font-weight: bold;
-}
-
-.hero-rain-drop.bright-green {
-  color: #4fff4f;
-  opacity: 0.9;
-  text-shadow: 0 0 15px #0f0, 0 0 25px rgba(0, 255, 65, 0.5);
-  font-weight: bold;
-}
-
-.hero-rain-drop.wiggle {
-  animation: wiggle 2s ease-in-out infinite alternate;
-}
-
-@keyframes wiggle {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(var(--wiggle-amount, 3px)); }
-}
-
 .hero-content {
   text-align: center;
-  z-index: 10;
+  z-index: 10; /* Keep hero content above matrix background */
   position: relative;
   max-width: 100%;
   margin: 0 auto;

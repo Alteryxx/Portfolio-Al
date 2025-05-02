@@ -6,7 +6,6 @@ import GlitchText from "./GlitchText"; // Import our new GlitchText component
 import Header from "./Header";
 
 const MatrixLanding = () => {
-  const [characters, setCharacters] = useState([]);
   const [heroCharacters, setHeroCharacters] = useState([]);
   const [trails, setTrails] = useState([]);
   const [titleTrigger, setTitleTrigger] = useState(false);
@@ -19,35 +18,22 @@ const MatrixLanding = () => {
     return charsRef.current[Math.floor(Math.random() * charsRef.current.length)];
   };
 
-  // Matrix rain effect
+  // Matrix rain effect - Consolidated using heroCharacters logic
   useEffect(() => {
-    const chars = charsRef.current;
-    const charArray = Array.from(
-      { length: 60 }, // Reduced for better performance
-      () => ({
-        char: getRandomChar(),
-        x: Math.random() * 100,
-        delay: Math.random() * 3,
-        duration: Math.random() * 4 + 3,
-        opacity: 0.4 + Math.random() * 0.4
-      })
-    );
-    setCharacters(charArray);
-    
-    // Hero-specific rain effect for improved title visibility
+    // Hero-specific rain effect adapted for general background
     const heroCharArray = Array.from(
-      { length: 80 }, // Doubled the number of characters for better visibility
+      { length: 120 }, // Increased count like Professional.jsx
       () => ({
         char: getRandomChar(),
         x: Math.random() * 100,
-        y: Math.random() * 20 - 20, // Start above the visible area
-        speed: 0.15 + Math.random() * 0.6, // Slow speeds for better text readability
-        opacity: 0.4 + Math.random() * 0.3, // Significantly increased opacity
-        size: 0.5 + Math.random() * 0.5, // Larger characters
-        green: Math.random() > 0.7, // More bright characters (30% chance)
-        wiggle: Math.random() > 0.7, // More wiggle (30% chance)
-        wiggleAmount: Math.random() * 2 + 1,
-        changeFrequency: Math.random() * 0.05 // Slightly more frequent changes
+        y: Math.random() * 100, // Start at random Y positions
+        speed: 0.15 + Math.random() * 0.7, // Parameters from Professional.jsx
+        opacity: 0.15 + Math.random() * 0.2, // Reduced opacity range
+        size: 0.8 + Math.random() * 0.3, // Smaller characters
+        green: Math.random() > 0.9, // Less bright characters (10% chance)
+        wiggle: Math.random() > 0.8, // Less wiggle (20% chance)
+        wiggleAmount: Math.random() * 1.5, // Less wiggle amount
+        changeFrequency: 0.05 // Match frequency from Professional.jsx
       })
     );
     setHeroCharacters(heroCharArray);
@@ -55,37 +41,48 @@ const MatrixLanding = () => {
     // Create a more efficient update mechanism using requestAnimationFrame
     let rafId;
     let lastUpdate = 0;
-    const updateInterval = 160; // Faster update rate for more dynamic effect
-    
+    const updateInterval = 200; // Slower update rate like Professional.jsx
+
     const animateRain = (timestamp) => {
       // Throttle updates to reduce CPU usage
       if (timestamp - lastUpdate >= updateInterval) {
         lastUpdate = timestamp;
-        
-        setHeroCharacters(prev => 
-          prev.map(char => ({
-            ...char,
-            y: char.y + char.speed * 0.8, // Move down faster for better visual effect
+
+        setHeroCharacters(prev =>
+          prev.map(char => {
+            let newY = char.y + char.speed * 0.15; // Slower speed multiplier
+
             // Reset position if it goes off screen
-            ...(char.y > 120 ? { 
-              y: Math.random() * 20 - 20,
-              x: Math.random() * 100, // Randomize x position on reset
-              speed: 0.15 + Math.random() * 0.7, // Varied speeds on reset
-              green: Math.random() > 0.7, // 30% chance of bright green
-              opacity: 0.4 + Math.random() * 0.3, // Higher opacity for better visibility
-              wiggle: Math.random() > 0.7, // 30% chance of wiggle
-              wiggleAmount: Math.random() * 3 + 1, // More wiggle
-              size: 0.5 + Math.random() * 0.5, // Larger characters
-            } : {}),
+            if (newY > 100) { // Check against 100vh
+              return { // Reset with parameters matching initialization
+                ...char,
+                y: -10, // Start above screen
+                x: Math.random() * 100,
+                char: getRandomChar(), // Get new char on reset
+                speed: 0.15 + Math.random() * 0.7,
+                opacity: 0.15 + Math.random() * 0.2,
+                size: 0.8 + Math.random() * 0.3,
+                green: Math.random() > 0.9,
+                wiggle: Math.random() > 0.8,
+                wiggleAmount: Math.random() * 1.5
+              };
+            }
+
             // Occasionally change character for more dynamic effect
-            char: Math.random() > 0.92 ? getRandomChar() : char.char
-          }))
+            const shouldChangeChar = Math.random() < char.changeFrequency; // Use changeFrequency
+
+            return {
+              ...char,
+              y: newY,
+              char: shouldChangeChar ? getRandomChar() : char.char
+            };
+          })
         );
       }
-      
+
       rafId = requestAnimationFrame(animateRain);
     };
-    
+
     // Start animation
     rafId = requestAnimationFrame(animateRain);
     
@@ -185,23 +182,8 @@ const MatrixLanding = () => {
 
   return (
     <div className="content">
-      {/* Matrix Rain Background */}
-      <div className="rain-container">
-        {characters.map((data, index) => (
-          <div
-            key={index}
-            className="rain-drop"
-            style={{
-              left: `${data.x}%`,
-              animationDelay: `${data.delay}s`,
-              animationDuration: `${data.duration}s`,
-              opacity: data.opacity
-            }}
-          >
-            {data.char}
-          </div>
-        ))}
-      </div>
+      {/* Matrix Rain Background - Using the refactored heroCharacters */}
+      {/* Removed the old .rain-container div */}
 
       {/* Cursor Trails */}
       {trails.map(trail => (
@@ -222,24 +204,22 @@ const MatrixLanding = () => {
         {/* Hero Section  */}
         <section className="hero-section">
           <div className="hero-container">
-            {/* Hero-specific Matrix Rain - Enhanced visibility */}
-            <div 
-              className="hero-rain-container"
-              style={{
-                backgroundColor: 'rgba(0, 0, 0, 0.5)', // Changed from green tint to pure black
-                boxShadow: 'inset 0 0 80px rgba(0, 0, 0, 0.3)', // Removed green tint from glow
-              }}
+            {/* Renamed container and drops, removed inline style */}
+            <div
+              className="matrix-background"
+              // Removed inline background/shadow styles
             >
               {heroCharacters.map((data, index) => (
                 <div
-                  key={`hero-${index}`}
-                  className={`hero-rain-drop ${data.green ? 'bright-green' : ''} ${data.wiggle ? 'wiggle' : ''}`}
+                  key={`matrix-${index}`} // Changed key prefix
+                  className={`matrix-drop ${data.green ? 'bright-green' : ''} ${data.wiggle ? 'wiggle' : ''}`} // Renamed class
                   style={{
                     left: `${data.x}%`,
                     top: `${data.y}%`,
                     opacity: data.opacity,
                     fontSize: `${data.size}rem`,
-                    filter: data.green ? 'drop-shadow(0 0 3px #00ff00)' : '', // Add glow to bright characters
+                    // Updated filter style to match Professional.jsx
+                    filter: data.green ? 'drop-shadow(0 0 2px rgba(0, 255, 0, 0.4))' : '',
                     ...(data.wiggle && {
                       '--wiggle-amount': `${data.wiggleAmount}px`
                     })
@@ -250,6 +230,7 @@ const MatrixLanding = () => {
               ))}
             </div>
 
+            {/* Removed inline styles overriding background */}
             <div className="hero-content centered-layout" style={{
               backgroundColor: "transparent",
               boxShadow: "none",
