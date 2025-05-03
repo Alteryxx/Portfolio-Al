@@ -8,9 +8,12 @@ const TravelToursPage = () => {
   const [heroCharacters, setHeroCharacters] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
   const [posts, setPosts] = useState([]);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [slideshowPlaying, setSlideshowPlaying] = useState(false);
   const charsRef = useRef("アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789");
   const location = useLocation();
   const navigate = useNavigate();
+  const slideIntervalRef = useRef(null);
 
   // Scroll to top on component mount
   useEffect(() => {
@@ -93,16 +96,66 @@ const TravelToursPage = () => {
       const post = getPostById(parseInt(postId));
       if (post) {
         setSelectedPost(post);
+        setCurrentSlide(0);
       }
     } else {
       // Reset selected post when navigating to the main tours page
       setSelectedPost(null);
+      setCurrentSlide(0);
     }
   }, [location.search]);
+
+  useEffect(() => {
+    // Auto slideshow effect for the current post's images
+    if (selectedPost && slideshowPlaying) {
+      // Clear any existing interval
+      if (slideIntervalRef.current) {
+        clearInterval(slideIntervalRef.current);
+      }
+      
+      // Set up a new interval for auto-advancing slides
+      slideIntervalRef.current = setInterval(() => {
+        if (selectedPost.images && selectedPost.images.length > 0) {
+          setCurrentSlide(prev => (prev + 1) % selectedPost.images.length);
+        }
+      }, 5000); // Change slide every 5 seconds
+    }
+    
+    return () => {
+      // Clean up interval on unmount or when slideshow is stopped
+      if (slideIntervalRef.current) {
+        clearInterval(slideIntervalRef.current);
+      }
+    };
+  }, [selectedPost, slideshowPlaying]);
 
   const handleBackClick = () => {
     setSelectedPost(null);
     navigate('/travel-tours');
+  };
+
+  const handlePrevSlide = () => {
+    if (selectedPost && selectedPost.images) {
+      setCurrentSlide(prev => 
+        prev === 0 ? selectedPost.images.length - 1 : prev - 1
+      );
+    }
+  };
+
+  const handleNextSlide = () => {
+    if (selectedPost && selectedPost.images) {
+      setCurrentSlide(prev => 
+        (prev + 1) % selectedPost.images.length
+      );
+    }
+  };
+
+  const handleDotClick = (index) => {
+    setCurrentSlide(index);
+  };
+
+  const toggleSlideshow = () => {
+    setSlideshowPlaying(prev => !prev);
   };
 
   return (
@@ -139,12 +192,49 @@ const TravelToursPage = () => {
             
             <article className="single-post">
               <div className="post-header">
-                <div 
-                  className="post-hero-image" 
-                  style={{ backgroundImage: `url(${selectedPost.imageUrl})` }}
-                >
-                  <div className="matrix-overlay"></div>
+                {/* Image Slider for Post */}
+                <div className="image-slider-container">
+                  <div 
+                    className="post-hero-image image-slider" 
+                    style={{ 
+                      backgroundImage: `url(${selectedPost.images ? selectedPost.images[currentSlide] : selectedPost.imageUrl})` 
+                    }}
+                  >
+                    <div className="matrix-overlay"></div>
+                    
+                    {/* Slider Controls */}
+                    <div className="slider-controls">
+                      <button className="slider-btn prev-btn" onClick={handlePrevSlide}>
+                        &#10094;
+                      </button>
+                      <button className="slider-btn next-btn" onClick={handleNextSlide}>
+                        &#10095;
+                      </button>
+                    </div>
+                    
+                    {/* Slideshow Controls */}
+                    <button 
+                      className={`slideshow-toggle ${slideshowPlaying ? 'playing' : ''}`} 
+                      onClick={toggleSlideshow}
+                    >
+                      {slideshowPlaying ? 'Pause' : 'Play'}
+                    </button>
+                    
+                    {/* Slide Indicator Dots */}
+                    {selectedPost.images && selectedPost.images.length > 1 && (
+                      <div className="slider-dots">
+                        {selectedPost.images.map((_, index) => (
+                          <span 
+                            key={index} 
+                            className={`slider-dot ${currentSlide === index ? 'active' : ''}`} 
+                            onClick={() => handleDotClick(index)}
+                          ></span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
+                
                 <h1 className="post-title">{selectedPost.title}</h1>
                 <div className="post-meta">
                   <span className="post-date">{selectedPost.date}</span>
@@ -188,7 +278,7 @@ const TravelToursPage = () => {
                     >
                       <div 
                         className="tour-image" 
-                        style={{ backgroundImage: `url(${post.imageUrl})` }}
+                        style={{ backgroundImage: `url(${post.images ? post.images[0] : post.imageUrl})` }}
                       >
                         <div className="matrix-overlay"></div>
                         <div className="tour-badge">Featured Tour</div>
@@ -212,7 +302,7 @@ const TravelToursPage = () => {
 
       <footer className="footer">
         <div className="footer-content">
-          <h2 className="thank-you-title">Thank you for exploring Baguio</h2>
+          <h2 className="thank-you-title">Thank you for Reading</h2>
           <div className="social-links">
             <a href="https://github.com/Alteryxx" className="social-link">GitHub</a>
             <a href="https://www.linkedin.com/in/al-fernandnez-2b0267125/" className="social-link">LinkedIn</a>

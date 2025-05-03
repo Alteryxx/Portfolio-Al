@@ -85,7 +85,7 @@ const CursorTrail = ({
             
             return newTrail
               .map((dot, index) => ({
-                ...dot,
+                ...dot, 
                 opacity: Math.max(0, dot.opacity - (opacity / (length * speed))),
                 scale: Math.max(0.5, dot.scale - (0.5 / length)),
               }))
