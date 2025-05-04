@@ -8,6 +8,16 @@ const MatrixLoader = ({ isLoading }) => {
   const [fadeOut, setFadeOut] = useState(false);
   const [loadingText, setLoadingText] = useState("SYSTEM INITIALIZING");
   const [shouldRender, setShouldRender] = useState(isLoading);
+  const [gridSize, setGridSize] = useState(() => {
+    // Initialize grid size based on device width
+    if (window.innerWidth <= 480) {
+      return { rows: 12, cols: 18 }; // Smaller grid for mobile
+    } else if (window.innerWidth <= 768) {
+      return { rows: 15, cols: 25 }; // Medium grid for tablet
+    } else {
+      return { rows: 20, cols: 35 }; // Full grid for desktop
+    }
+  });
   const rafRef = useRef(null);
   const timeoutRef = useRef(null);
   const fadeTimerRef = useRef(null);
@@ -18,17 +28,6 @@ const MatrixLoader = ({ isLoading }) => {
     return window.innerWidth <= 768;
   }, []);
   
-  // Optimize grid size for different devices
-  const gridSize = useMemo(() => {
-    if (window.innerWidth <= 480) {
-      return { rows: 12, cols: 18 }; // Smaller grid for mobile
-    } else if (window.innerWidth <= 768) {
-      return { rows: 15, cols: 25 }; // Medium grid for tablet
-    } else {
-      return { rows: 20, cols: 35 }; // Full grid for desktop
-    }
-  }, []);
-
   // Cleanup all timers on unmount
   useEffect(() => {
     return () => {
@@ -119,60 +118,78 @@ const MatrixLoader = ({ isLoading }) => {
     }
   }, [isLoading, shouldRender]);
   
+  // Handle window resize to update gridSize
+  useEffect(() => {
+    const handleResize = () => {
+      let newSize;
+      if (window.innerWidth <= 480) {
+        newSize = { rows: 12, cols: 18 }; // Smaller grid for mobile
+      } else if (window.innerWidth <= 768) {
+        newSize = { rows: 15, cols: 25 }; // Medium grid for tablet
+      } else {
+        newSize = { rows: 20, cols: 35 }; // Full grid for desktop
+      }
+      setGridSize(newSize);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   // Generate matrix characters for the background grid
   useEffect(() => {
-    if (shouldRender) {
-      const katakana = "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲンガギグゲゴザジズゼゾダヂヅデドバビブベボパピプペポ";
-      const latin = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-      const symbols = "♯≠∞♬♪†‡√∑";
-      const digits = "0123456789";
-      const chars = katakana + latin + symbols + digits;
-      
-      // Create character grid - reduce density
-      const { rows, cols } = gridSize;
+    if (shouldRender && !characters.length) {
+      // Create background characters
+      const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ";
       const charGrid = [];
       
-      for (let i = 0; i < rows; i++) {
-        for (let j = 0; j < cols; j++) {
-          // Only add a character with 70% probability to create a less dense effect
-          if (Math.random() < 0.7) {
+      // Create evenly distributed characters using current gridSize state
+      const { rows, cols } = gridSize;
+      
+      // Create evenly distributed characters
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          if (Math.random() > 0.6) { // 40% chance (was 60%)
             charGrid.push({
               char: chars[Math.floor(Math.random() * chars.length)],
-              row: i,
-              col: j,
-              delay: (i * 0.05) + (j * 0.02),
-              duration: Math.random() * 0.6 + 0.4,
-              glitch: Math.random() > 0.97 // Occasional glitch effect
+              row,
+              col,
+              delay: Math.random() * 5,
+              duration: 1 + Math.random() * 3,
+              glitch: Math.random() > 0.9,
+              opacity: 0.01 + Math.random() * 0.05 // Lower opacity range 0.01-0.06 (previously 0.03-0.15)
             });
           }
         }
       }
-      
       setCharacters(charGrid);
       
-      // Create highlighted characters that will be more prominent
+      // Create highlight characters
       const highlights = [];
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < (isMobile ? 10 : 20); i++) { 
         highlights.push({
           char: chars[Math.floor(Math.random() * chars.length)],
           x: Math.random() * 100,
           y: Math.random() * 100,
-          scale: 1 + Math.random() * 0.5,
-          glow: Math.random() > 0.5
+          scale: 1.2 + Math.random() * 1.3,
+          glow: Math.random() > 0.7,
+          opacity: 0.02 + Math.random() * 0.08
         });
       }
       setHighlightChars(highlights);
       
       // Create falling code streams
       const streams = [];
-      for (let i = 0; i < (isMobile ? 8 : 15); i++) {
+      for (let i = 0; i < (isMobile ? 5 : 10); i++) { 
         const streamLength = Math.floor(Math.random() * 10) + 5;
         const streamChars = [];
         
         for (let j = 0; j < streamLength; j++) {
           streamChars.push({
             char: chars[Math.floor(Math.random() * chars.length)],
-            opacity: 1 - (j / streamLength) * 0.8 // Fade out toward the end of the stream
+            opacity: (1 - (j / streamLength) * 0.8) * 0.1 // Reduce overall opacity multiplier from 0.15 to 0.1
           });
         }
         
@@ -248,7 +265,7 @@ const MatrixLoader = ({ isLoading }) => {
       height: '100%',
       zIndex: 9999
     }}>
-      <div className="matrix-rain-effect"></div>
+      <div className="matrix-rain-effect" style={{ opacity: 0.1 }}></div>
       
       <div className="loader-overlay">
         {/* Static background characters */}
@@ -260,7 +277,8 @@ const MatrixLoader = ({ isLoading }) => {
               left: `${((data.col / gridSize.cols) * 100)}%`,
               top: `${((data.row / gridSize.rows) * 100)}%`,
               animationDelay: `${data.delay}s`,
-              animationDuration: `${data.duration}s`
+              animationDuration: `${data.duration}s`,
+              opacity: data.opacity || 0.1 // Use the defined opacity or fallback to 0.1
             }}
           >
             {data.char}
@@ -275,7 +293,8 @@ const MatrixLoader = ({ isLoading }) => {
             style={{
               left: `${data.x}%`,
               top: `${data.y}%`,
-              transform: `scale(${data.scale})`
+              transform: `scale(${data.scale})`,
+              opacity: data.opacity || 0.15 // Use the defined opacity or fallback to 0.15
             }}
           >
             {data.char}
@@ -284,19 +303,23 @@ const MatrixLoader = ({ isLoading }) => {
         
         {/* Falling code streams */}
         {codeStreams.map((stream, streamIndex) => (
-          <div
-            key={`stream-${streamIndex}`}
+          <div 
+            key={`stream-${streamIndex}`} 
             className="code-stream"
             style={{
               left: `${stream.x}%`,
-              top: `${stream.y}%`
+              top: `${stream.y}%`,
+              animationDuration: `${2.5 / stream.speed}s`
             }}
           >
             {stream.chars.map((charData, charIndex) => (
-              <div
-                key={`stream-char-${streamIndex}-${charIndex}`}
+              <div 
+                key={`stream-char-${streamIndex}-${charIndex}`} 
                 className="stream-char"
-                style={{ opacity: charData.opacity }}
+                style={{
+                  animationDelay: `${charIndex * 0.1}s`,
+                  opacity: charData.opacity
+                }}
               >
                 {charData.char}
               </div>
@@ -307,9 +330,7 @@ const MatrixLoader = ({ isLoading }) => {
       
       {/* Loading message */}
       <div className="loader-message">
-        <span className="message-bracket">[</span>
         <span className="message-text">{loadingText}</span>
-        <span className="message-bracket">]</span>
         
         <div className="loading-dots">
           <div className="dot"></div>
@@ -317,7 +338,7 @@ const MatrixLoader = ({ isLoading }) => {
           <div className="dot"></div>
         </div>
         
-        <div className="access-message">
+        <div className="loader-status">
           {fadeOut ? "CONNECTION TERMINATED" : "ESTABLISHING CONNECTION"}
         </div>
       </div>

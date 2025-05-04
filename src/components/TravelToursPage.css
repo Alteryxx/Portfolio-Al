@@ -156,19 +156,26 @@
   margin-bottom: 4rem;
 }
 
+/* Make tour cards clickable */
 .tour-card {
   background-color: rgba(0, 30, 0, 0.75);
   border: 1px solid rgba(0, 255, 65, 0.4);
   border-radius: 5px;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
+  outline: none;
+  position: relative;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4), 0 0 10px rgba(0, 255, 65, 0.2);
 }
 
 .tour-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 255, 65, 0.4);
+  transform: translateY(-5px);
+}
+
+.tour-card:focus {
+  outline: 2px solid var(--matrix-green);
+  outline-offset: 2px;
 }
 
 .tour-image {
@@ -303,6 +310,7 @@
   font-size: 0.9rem;
 }
 
+/* Style the view button as non-clickable */
 .view-tour-button {
   background-color: rgba(0, 255, 65, 0.1);
   border: 1px solid rgba(0, 255, 65, 0.4);
@@ -312,6 +320,7 @@
   font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.3s ease;
+  pointer-events: none;
 }
 
 .view-tour-button:hover {
@@ -679,4 +688,15 @@
   .next-btn {
     margin-right: 10px;
   }
+}
+
+/* Enhance hover effect for tour cards */
+.tour-card:hover .tour-title {
+  color: var(--matrix-light-green);
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.4);
+}
+
+.tour-card:hover .view-tour-button {
+  background-color: rgba(0, 255, 65, 0.3);
+  text-decoration: underline;
 } 

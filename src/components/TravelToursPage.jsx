@@ -275,6 +275,13 @@ const TravelToursPage = () => {
                     <div 
                       key={post.id} 
                       className="tour-card featured-tour"
+                      onClick={() => navigate(`/travel-tours?id=${post.id}`)}
+                      tabIndex="0"
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          navigate(`/travel-tours?id=${post.id}`);
+                        }
+                      }}
                     >
                       <div 
                         className="tour-image" 
@@ -288,7 +295,7 @@ const TravelToursPage = () => {
                         <p className="tour-excerpt">{post.excerpt}</p>
                         <div className="tour-meta">
                           <span className="tour-date">{post.date}</span>
-                          <Link to={`/travel-tours?id=${post.id}`} className="view-tour-button">View Details</Link>
+                          <span className="view-tour-button">View Details</span>
                         </div>
                       </div>
                     </div>

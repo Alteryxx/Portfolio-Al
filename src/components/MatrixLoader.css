@@ -227,6 +227,7 @@
   animation: messageGlow 2s infinite alternate;
   width: 90%;
   max-width: 500px;
+  z-index: 10; /* Ensure message is above overlay */
 }
 
 .message-bracket {

@@ -222,7 +222,25 @@ const Blog = () => {
                 <h2 className="section-title">Featured Articles</h2>
                 <div className="featured-posts-grid">
                   {getFeaturedPosts().map(post => (
-                    <div key={post.id} className="featured-post-card">
+                    <div 
+                      key={post.id} 
+                      className="featured-post-card"
+                      onClick={() => navigate(post.categories.includes("Travel Tours") 
+                        ? `/travel-tours?id=${post.id}` 
+                        : post.categories.includes("Industrial Tour") 
+                          ? `/industrial-tours?id=${post.id}` 
+                          : `/blog/${post.id}`)}
+                      tabIndex="0"
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          navigate(post.categories.includes("Travel Tours") 
+                            ? `/travel-tours?id=${post.id}` 
+                            : post.categories.includes("Industrial Tour") 
+                              ? `/industrial-tours?id=${post.id}` 
+                              : `/blog/${post.id}`);
+                        }
+                      }}
+                    >
                       <div 
                         className="post-image" 
                         style={{ backgroundImage: `url(${post.imageUrl})` }}
@@ -240,12 +258,7 @@ const Blog = () => {
                             <span key={category} className="category-tag">{category}</span>
                           ))}
                         </div>
-                        <Link to={post.categories.includes("Travel Tours") 
-                          ? `/travel-tours?id=${post.id}` 
-                          : post.categories.includes("Industrial Tour") 
-                            ? `/industrial-tours?id=${post.id}` 
-                            : `/blog/${post.id}`} 
-                          className="read-more-link">Read More →</Link>
+                        <span className="read-more-link">Read More →</span>
                       </div>
                     </div>
                   ))}
@@ -271,7 +284,17 @@ const Blog = () => {
                         post.title.includes("Subic Convention")
                       )
                       .map(post => (
-                        <div key={post.id} className="category-post-card featured-tour">
+                        <div 
+                          key={post.id} 
+                          className="category-post-card featured-tour"
+                          onClick={() => navigate(`/industrial-tours?id=${post.id}`)}
+                          tabIndex="0"
+                          onKeyPress={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              navigate(`/industrial-tours?id=${post.id}`);
+                            }
+                          }}
+                        >
                           <div 
                             className="category-post-image" 
                             style={{ backgroundImage: `url(${post.imageUrl})` }}
@@ -281,7 +304,7 @@ const Blog = () => {
                           </div>
                           <h4 className="post-title">{post.title}</h4>
                           <p className="post-excerpt">{post.excerpt}</p>
-                          <Link to={`/industrial-tours?id=${post.id}`} className="read-more-link">Read More →</Link>
+                          <span className="read-more-link">Read More →</span>
                         </div>
                       ))}
                   </div>
@@ -305,7 +328,17 @@ const Blog = () => {
                         post.title.includes("Presidential Car")
                       )
                       .map(post => (
-                        <div key={post.id} className="category-post-card featured-tour">
+                        <div 
+                          key={post.id} 
+                          className="category-post-card featured-tour"
+                          onClick={() => navigate(`/travel-tours?id=${post.id}`)}
+                          tabIndex="0"
+                          onKeyPress={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              navigate(`/travel-tours?id=${post.id}`);
+                            }
+                          }}
+                        >
                           <div 
                             className="category-post-image" 
                             style={{ backgroundImage: `url(${post.imageUrl})` }}
@@ -315,7 +348,7 @@ const Blog = () => {
                           </div>
                           <h4 className="post-title">{post.title}</h4>
                           <p className="post-excerpt">{post.excerpt}</p>
-                          <Link to={`/travel-tours?id=${post.id}`} className="read-more-link">Read More →</Link>
+                          <span className="read-more-link">Read More →</span>
                         </div>
                       ))}
                   </div>
@@ -332,7 +365,25 @@ const Blog = () => {
                 <h2 className="section-title">All Articles</h2>
                 <div className="posts-grid">
                   {blogPosts.map(post => (
-                    <div key={post.id} className="post-card">
+                    <div 
+                      key={post.id} 
+                      className="post-card"
+                      onClick={() => navigate(post.categories.includes("Travel Tours") 
+                        ? `/travel-tours?id=${post.id}` 
+                        : post.categories.includes("Industrial Tour") 
+                          ? `/industrial-tours?id=${post.id}` 
+                          : `/blog/${post.id}`)}
+                      tabIndex="0"
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          navigate(post.categories.includes("Travel Tours") 
+                            ? `/travel-tours?id=${post.id}` 
+                            : post.categories.includes("Industrial Tour") 
+                              ? `/industrial-tours?id=${post.id}` 
+                              : `/blog/${post.id}`);
+                        }
+                      }}
+                    >
                       <div 
                         className="post-card-image" 
                         style={{ backgroundImage: `url(${post.imageUrl})` }}
@@ -350,12 +401,7 @@ const Blog = () => {
                             <span key={category} className="category-tag">{category}</span>
                           ))}
                         </div>
-                        <Link to={post.categories.includes("Travel Tours") 
-                          ? `/travel-tours?id=${post.id}` 
-                          : post.categories.includes("Industrial Tour") 
-                            ? `/industrial-tours?id=${post.id}` 
-                            : `/blog/${post.id}`} 
-                          className="read-more-link">Read More →</Link>
+                        <span className="read-more-link">Read More →</span>
                       </div>
                     </div>
                   ))}

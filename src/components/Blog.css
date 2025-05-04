@@ -834,4 +834,36 @@
   padding: 2rem 0;
   margin: 2rem 0;
   border-radius: 8px;
-} 
+}
+
+/* Make all blog cards clickable */
+.featured-post-card,
+.category-post-card,
+.post-card {
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.featured-post-card:hover,
+.category-post-card:hover,
+.post-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), 0 0 15px rgba(0, 255, 65, 0.2);
+}
+
+/* Enhance read more link to indicate the entire card is clickable */
+.featured-post-card .read-more-link,
+.category-post-card .read-more-link,
+.post-card .read-more-link {
+  color: var(--matrix-green);
+  pointer-events: none; /* Prevents the link from capturing clicks */
+}
+
+/* Animate read more link on card hover */
+.featured-post-card:hover .read-more-link,
+.category-post-card:hover .read-more-link,
+.post-card:hover .read-more-link {
+  text-decoration: underline;
+  color: var(--matrix-light-green);
+}
+

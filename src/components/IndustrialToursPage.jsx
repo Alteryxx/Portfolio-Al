@@ -192,7 +192,7 @@ const IndustrialToursPage = () => {
       
       {/* Fixed Header */}
       <Header />
-
+        
       <main className="industrial-tours-content">
         {selectedPost ? (
           <div className="single-post-container">
@@ -287,6 +287,13 @@ const IndustrialToursPage = () => {
                     <div 
                       key={post.id} 
                       className="tour-card featured-tour"
+                      onClick={() => navigate(`/industrial-tours?id=${post.id}`)}
+                      tabIndex="0"
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          navigate(`/industrial-tours?id=${post.id}`);
+                        }
+                      }}
                     >
                       <div 
                         className="tour-image" 
@@ -300,7 +307,7 @@ const IndustrialToursPage = () => {
                         <p className="tour-excerpt">{post.excerpt}</p>
                         <div className="tour-meta">
                           <span className="tour-date">{post.date}</span>
-                          <Link to={`/industrial-tours?id=${post.id}`} className="view-tour-button">View Details</Link>
+                          <span className="view-tour-button">View Details</span>
                         </div>
                       </div>
                     </div>
