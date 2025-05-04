@@ -27,20 +27,33 @@ const Contact = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    // With Netlify Forms, form submission is handled automatically
-    // But we'll still show the success UI and reset the form
-    setFormStatus("success");
+    // For Netlify Forms when JavaScript is enabled
+    const form = e.target;
+    const formData = new FormData(form);
     
-    // Reset form after 3 seconds
-    setTimeout(() => {
-      setFormStatus(null);
-      setFormState({
-        name: "",
-        email: "",
-        subject: "",
-        message: ""
-      });
-    }, 3000);
+    fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams(formData).toString(),
+    })
+    .then(() => {
+      setFormStatus("success");
+      
+      // Reset form after 3 seconds
+      setTimeout(() => {
+        setFormStatus(null);
+        setFormState({
+          name: "",
+          email: "",
+          subject: "",
+          message: ""
+        });
+      }, 3000);
+    })
+    .catch((error) => {
+      console.error("Form submission error:", error);
+      setFormStatus("error");
+    });
   };
 
   // Get a random katakana character
@@ -180,6 +193,18 @@ const Contact = () => {
                     <h3>Message Sent Successfully!</h3>
                     <p>Thank you for reaching out. I'll get back to you soon.</p>
                   </div>
+                ) : formStatus === "error" ? (
+                  <div className="error-message">
+                    <div className="error-icon">⚠</div>
+                    <h3>Message Not Sent</h3>
+                    <p>There was a problem sending your message. Please try again or contact me directly via email.</p>
+                    <button 
+                      className="retry-button" 
+                      onClick={() => setFormStatus(null)}
+                    >
+                      Try Again
+                    </button>
+                  </div>
                 ) : (
                   <form 
                     className="contact-form" 
@@ -187,9 +212,12 @@ const Contact = () => {
                     data-netlify="true"
                     name="portfolio-contact"
                     method="POST"
+                    netlify-honeypot="bot-field"
                   >
                     {/* Hidden input for Netlify Forms */}
                     <input type="hidden" name="form-name" value="portfolio-contact" />
+                    <input type="hidden" name="bot-field" />
+                    <input type="hidden" name="subject" value={`New contact from ${formState.name}: ${formState.subject}`} />
                     
                     <div className="form-prompt">
                       <span className="prompt-symbol">$</span>
@@ -273,7 +301,7 @@ const Contact = () => {
                   <div className="info-group">
                     <div className="info-label">EMAIL:</div>
                     <div className="info-value">
-                      <a href="mailto:your.email@example.com">daedalusdivine68@gmail.com</a>
+                      <a href="mailto:dadaedalusdivine69@gmail.com">dadaedalusdivine69@gmail.com</a>
                     </div>
                   </div>
                   <div className="info-group">

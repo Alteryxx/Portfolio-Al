@@ -1,0 +1,25 @@
+[build]
+  publish = "dist"
+  command = "npm run build"
+
+[forms]
+  # Define the main contact form
+  [forms.portfolio-contact]
+    # Form name used in the HTML
+    form_name = "portfolio-contact"
+
+[forms.portfolio-contact.email]
+  # Send a notification email when a form is submitted
+  to = "dadaedalusdivine69@gmail.com"
+  subject = "New Portfolio Contact Form Submission"
+  # Customize the confirmation message
+  from = "Portfolio Website <no-reply@netlify.app>"
+  include_form_values = true
+  
+# Security headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin" 
