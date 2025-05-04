@@ -8,6 +8,7 @@ import Contact from "./components/Contact";
 import CursorTrail from "./components/CursorTrail";
 import TravelToursPage from "./components/TravelToursPage";
 import IndustrialToursPage from "./components/IndustrialToursPage";
+import ProjectDetail from "./components/ProjectDetail";
 import './App.css'
 
 function MainLayout() {
@@ -81,6 +82,7 @@ function MainLayout() {
         <Routes>
           <Route path="/" element={<MatrixLanding />} />
           <Route path="/professional" element={<Professional />} />
+          <Route path="/project/:id" element={<ProjectDetail />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:id" element={<Blog />} />
           <Route path="/contact" element={<Contact />} />
