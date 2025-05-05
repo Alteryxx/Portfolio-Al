@@ -173,7 +173,6 @@ const ProjectDetail = () => {
           "Standard calculation mode with arithmetic operations and memory functions",
           "Scientific mode with trigonometric functions, logarithms, and advanced math operations",
           "Responsive design that works seamlessly across desktop and mobile devices",
-          "Theme customization with light/dark mode and high contrast options",
           "Keyboard support for enhanced usability and accessibility",
           "History feature to track previous calculations and results",
           "Built with Vite for lightning-fast development and optimized production builds"
