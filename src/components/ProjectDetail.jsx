@@ -157,6 +157,28 @@ const ProjectDetail = () => {
           "System Administration: Securely manage user accounts, roles, system settings, and audit trails" 
         ]
       },
+      {
+        id: "react-calculator",
+        title: "React Calculator: Modern Calculation App",
+        description: "A sleek, responsive calculator application built with React and Vite, featuring both standard and scientific calculation modes. This project demonstrates modern front-end development practices, state management techniques, and clean user interface design. The calculator provides an intuitive user experience with keyboard support and theme customization options.",
+        technologies: ["React", "Vite", "JavaScript", "CSS3", "React Hooks"],
+        demoUrl: "https://scicalculatetorss.netlify.app/",
+        githubUrl: "https://github.com/Alteryxx/Calculatorsci",
+        images: [
+          "/projects/11.jpg",
+          "/projects/12.jpg"
+          
+        ],
+        features: [
+          "Standard calculation mode with arithmetic operations and memory functions",
+          "Scientific mode with trigonometric functions, logarithms, and advanced math operations",
+          "Responsive design that works seamlessly across desktop and mobile devices",
+          "Theme customization with light/dark mode and high contrast options",
+          "Keyboard support for enhanced usability and accessibility",
+          "History feature to track previous calculations and results",
+          "Built with Vite for lightning-fast development and optimized production builds"
+        ]
+      },
       
     ];
 

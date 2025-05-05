@@ -117,6 +117,13 @@ const Professional = () => {
       technologies: ["React", "Node.js", "Express", "MongoDB"],
       image: "/projects/9.jpg"
     },
+    {
+      id: "react-calculator",
+      title: "React Calculator: Modern Calculation App",
+      description: "A sleek, responsive calculator built with React and Vite featuring standard and scientific calculation modes. This project demonstrates front-end development skills with state management and modern UI design principles.",
+      technologies: ["React", "Vite", "JavaScript", "CSS3"],
+      image: "/projects/11.jpg"
+    },
     
   ];
 
@@ -206,25 +213,33 @@ const Professional = () => {
       title: "Windows 10 Security",
       issuer: "LinkedIn Learning",
       date: "2023",
-      image: "/certs/4.jpg",
-      certificateUrl: "/certs/4.jpg",
+      image: "/certs/6.jpg",
+      certificateUrl: "/certs/6.jpg",
       duration: "2hrs 10mins"
     },
     {
       title: "Windows 11 Essential Training",
       issuer: "LinkedIn Learning",
       date: "2023",
-      image: "/certs/5.jpg",
-      certificateUrl: "/certs/5.jpg",
+      image: "/certs/4.jpg",
+      certificateUrl: "/certs/4.jpg",
       duration: "4hrs 1min"
     },
     {
       title: "Cybersecurity Foundations",
       issuer: "LinkedIn Learning",
       date: "2023",
-      image: "/certs/6.jpg",
-      certificateUrl: "/certs/CertificateOfCompletion_Cybersecurity Foundations_page-0001.jpg",
+      image: "/certs/5.jpg",
+      certificateUrl: "/certs/5.jpg",
       duration: "3hrs 33min"
+    },
+    {
+      title: "Explore a Career in IT Support",
+      issuer: "LinkedIn Learning",
+      date: "2025",
+      image: "/certs/7.jpg",
+      certificateUrl: "/certs/7.jpg",
+      duration: "16hrs 53mins"
     }
     
   ];
@@ -570,17 +585,6 @@ const Professional = () => {
                       ))}
                     </div>
                     <div className="project-links">
-                      <a 
-                        href={`https://github.com/yourusername/${project.id}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="source-code-link"
-                        onClick={(e) => {
-                          e.stopPropagation(); // Prevent double navigation
-                        }}
-                      >
-                        <span className="link-icon">💻</span> Source Code
-                      </a>
                       <button 
                         className="view-details-button"
                         onClick={(e) => {
