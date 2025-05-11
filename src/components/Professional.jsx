@@ -240,6 +240,14 @@ const Professional = () => {
       image: "/certs/7.jpg",
       certificateUrl: "/certs/7.jpg",
       duration: "16hrs 53mins"
+    },
+    {
+      title: "Data Analysis with Python",
+      issuer: "freeCodeCamp",
+      date: "2025",
+      image: "/certs/8.jpg",
+      certificateUrl: "/certs/8.jpg",
+      duration: "300 hours"
     }
     
   ];
